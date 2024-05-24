@@ -71,7 +71,7 @@ interface DaosProps {
     daoSelected: (dao: Dao) => void;
 }
 
-export default function Daos() {
+export default function Daos({ daoSelected }: DaosProps) {
   const [daos, setDaos] = useState<Dao[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
