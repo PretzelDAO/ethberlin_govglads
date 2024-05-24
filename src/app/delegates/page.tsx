@@ -17,6 +17,9 @@ const delegates: Delegate[] = [
 ]
 
 const Page = () => {
-  return delegates.map((delegate, index) => (<DelegateCard key={index} name={delegate.name}/>))}
+  return <div className="max-w-xl mx-auto space-y-6 py-6">
+    {delegates.map((delegate, index) => (<DelegateCard key={index} name={delegate.name}/>))}
+  </div>
+}
 
 export default Page

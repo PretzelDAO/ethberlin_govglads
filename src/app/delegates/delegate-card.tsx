@@ -7,13 +7,13 @@ interface Props {
 }
 
 const DelegateCard = ({name}: Props) => {
-  return <div className='grid grid-cols-[1fr,4fr,1fr]'>
+  return <div className='grid grid-cols-[max-content,auto,max-content] items-center gap-10 bg-slate-100 px-10 py-4 rounded-md'>
     <button>
-      <Image src={ampelmannGreenPic} alt=''/>
+      <Image src={ampelmannGreenPic} alt='' width={40}/>
     </button>
     <div>{name}</div>
     <button>
-      <Image src={ampelmannRedPic} alt=''/>
+      <Image src={ampelmannRedPic} alt='' width={40}/>
     </button>
   </div>
 }
