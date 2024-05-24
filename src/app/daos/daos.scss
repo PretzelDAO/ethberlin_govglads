@@ -1,0 +1,25 @@
+.daos {
+    h2 {
+        text-align: center;
+        font-size: 30px;
+        margin: 20px;
+    }
+
+    .dao {
+        text-align: center;
+
+        &:hover {
+             background-color: gray;
+             cursor: pointer;
+        }
+
+        img {
+          margin: auto;
+          padding: 10px;
+        }
+
+        h4 {
+            margin: 10px;
+        }
+    }
+}
