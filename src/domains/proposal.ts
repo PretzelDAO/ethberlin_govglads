@@ -1,11 +1,14 @@
-import { Delegate } from "@/domains/delegate";
+export interface DelegateProbability {
+  wallet: string;
+  probability: number;
+}
 
 export interface ProposalRequest {
   proposal: string;
-  delegates: [Delegate];
+  delegates: [DelegateProbability];
 }
 
 export interface ProposalResponse {
   score: number;
-  delegates: [Delegate];
+  delegates: [DelegateProbability];
 }
