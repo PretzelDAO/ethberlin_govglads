@@ -1,5 +1,6 @@
 import type { Delegate } from "@/domains/delegate"
 import DelegateCard from "./delegate-card"
+import SearchBar from "./search-bar"
 
 const delegates: Delegate[] = [
   {
@@ -18,6 +19,7 @@ const delegates: Delegate[] = [
 
 const Page = () => {
   return <div className="max-w-xl mx-auto space-y-6 py-6">
+    <SearchBar/>
     {delegates.map((delegate, index) => (<DelegateCard key={index} name={delegate.name}/>))}
   </div>
 }
