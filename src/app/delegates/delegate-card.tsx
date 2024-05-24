@@ -8,11 +8,12 @@ import composeClassName from "@/utils/compose-class-name";
 
 interface Props {
   name: string;
+  votingPower: number;
 }
 
 type Expectation = "neutral" | "for" | "against";
 
-const DelegateCard = ({ name }: Props) => {
+const DelegateCard = ({ name, votingPower }: Props) => {
   const [expectation, setExpectation] = useState<Expectation>("neutral");
 
   const toggleExpectation = (newExpectation: Expectation) => {
@@ -38,7 +39,9 @@ const DelegateCard = ({ name }: Props) => {
       <button onClick={() => toggleExpectation("against")}>
         <Image src={ampelmannRedPic} alt="" width={40} />
       </button>
-      <div>{name}</div>
+      <div>
+        {name} ({votingPower})
+      </div>
       <button onClick={() => toggleExpectation("for")}>
         <Image src={ampelmannGreenPic} alt="" width={40} />
       </button>

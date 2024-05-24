@@ -30,9 +30,18 @@ const Page = () => {
         className="w-full px-10 py-4 bg-slate-100 rounded-md text-center"
         placeholder="Filter delegates"
       />
-      {delegates.map((delegate, index) => (
-        <DelegateCard key={index} name={delegate.name} />
-      ))}
+      {delegates
+        .filter((delegate) =>
+          delegate.name.toLowerCase().includes(search.toLowerCase())
+        )
+        .sort((a, b) => b.votingPower - a.votingPower)
+        .map((delegate, index) => (
+          <DelegateCard
+            key={index}
+            name={delegate.name}
+            votingPower={delegate.votingPower}
+          />
+        ))}
     </div>
   );
 };
