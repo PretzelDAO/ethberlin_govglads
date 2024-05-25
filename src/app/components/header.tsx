@@ -12,12 +12,10 @@ interface Props {
   berlin: boolean;
 }
 
-
-
 export default function Header({ dao, setBerlin, berlin }: Props) {
   const { signedAccountId, wallet } = useContext(NearContext);
-  const [action, setAction] = useState(() => { });
-  const [label, setLabel] = useState('Loading...');
+  const [action, setAction] = useState(() => {});
+  const [label, setLabel] = useState("Loading...");
 
   useEffect(() => {
     if (!wallet) return;
@@ -27,7 +25,7 @@ export default function Header({ dao, setBerlin, berlin }: Props) {
       setLabel(`Logout ${signedAccountId}`);
     } else {
       setAction(() => (wallet as any).signIn);
-      setLabel('Login');
+      setLabel("Login");
     }
   }, [signedAccountId, wallet]);
 
@@ -38,7 +36,12 @@ export default function Header({ dao, setBerlin, berlin }: Props) {
           <div>
             <Image src={logo} alt="" height={56} />
             <h1>Governance Gladiators</h1>
-            <button clasName="btn btn-secondary float-right pt-4" onClick={action as any}>{label}</button>
+            <button
+              className="btn btn-secondary float-right pt-4"
+              onClick={action as any}
+            >
+              {label}
+            </button>
           </div>
           {dao && (
             <div className="welcome">
