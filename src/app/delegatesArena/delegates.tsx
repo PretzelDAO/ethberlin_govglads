@@ -162,7 +162,7 @@ const Delegates = ({
         <div className="flex">
           <div className="supporters flex flex-col w-1/6">
             <Droppable id="supporters">
-              <h4>Supporters</h4>
+              <h4 style={{ marginBottom: "18px" }}>Supporters</h4>
               <div className="grid grid-cols-2 gap-10">
                 {renderDelegates(supporters)}
               </div>
@@ -178,7 +178,7 @@ const Delegates = ({
           </div>
           <div className="non-supporters flex flex-col w-1/6 ">
             <Droppable id="non-supporters">
-              <h4>Non-Supporters</h4>
+              <h4 style={{ marginBottom: "18px" }}>Non-Supporters</h4>
               <div className="grid grid-cols-2 gap-10">
                 {renderDelegates(nonSupporters)}
               </div>
