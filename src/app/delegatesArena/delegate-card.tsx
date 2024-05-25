@@ -14,6 +14,7 @@ interface Props {
   state: number;
   size: number;
   showScore: boolean;
+  rank: number;
   onChange: (number: number) => void;
 }
 
@@ -24,6 +25,7 @@ const DelegateCard = ({
   size,
   state,
   showScore,
+  rank,
   onChange,
 }: Props) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -48,6 +50,31 @@ const DelegateCard = ({
     onChange(state === newState ? 0 : newState);
   };
 
+  const getGladiatorImage = (score) => {
+    score *= 7;
+    if (score >= 90) {
+      return "/images/gladiators/gladiator_level10.jpg";
+    } else if (score >= 70) {
+      return "/images/gladiators/gladiator_level9.jpg";
+    } else if (score >= 60) {
+      return "/images/gladiators/gladiator_level8.jpg";
+    } else if (score >= 50) {
+      return "/images/gladiators/gladiator_level7.jpg";
+    } else if (score >= 40) {
+      return "/images/gladiators/gladiator_level6.jpg";
+    } else if (score >= 30) {
+      return "/images/gladiators/gladiator_level5.jpg";
+    } else if (score >= 20) {
+      return "/images/gladiators/gladiator_level4.jpg";
+    } else if (score >= 10) {
+      return "/images/gladiators/gladiator_level3.jpg";
+    } else if (score >= 5) {
+      return "/images/gladiators/gladiator_level2.jpg";
+    } else {
+      return "/images/gladiators/gladiator_level1.jpg";
+    }
+  };
+
   return (
     <div
       ref={setNodeRef}
@@ -68,7 +95,7 @@ const DelegateCard = ({
       style={{
         height: size,
         width: size,
-        backgroundImage: "url(" + delegate.logo + ")",
+        backgroundImage: `url(${getGladiatorImage(rank)}`,
         transform: CSS.Translate.toString(transform),
       }}
       {...listeners}

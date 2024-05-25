@@ -102,6 +102,7 @@ const Delegates = ({
             size={normalize(delegate.votingpower, votingPowers)}
             showScore={showScores}
             onChange={(newState) => toggled(delegate.wallet, newState)}
+            rank={delegate.votingpower/delegate.maxvotingpower*100}
           />
         );
       });
