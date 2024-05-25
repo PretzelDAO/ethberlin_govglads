@@ -1,0 +1,19 @@
+header {
+    background-color: #000;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 10px 0;
+    color: white;
+    font-size: 20px;
+    padding: 10px 20px;
+    background: rgb(47,78,136);
+    background: linear-gradient(16deg, rgba(47,78,136,1) 0%, rgba(7,23,62,1) 100%);
+
+    img, h1 {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0;
+        margin-right: 20px;
+    }
+}
