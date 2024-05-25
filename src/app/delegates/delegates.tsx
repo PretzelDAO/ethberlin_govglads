@@ -57,7 +57,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
   console.log(dCon.delegates);
 
   return (
-    <div className="min-w px-10 mx-auto space-y-6 py-6">
+    <div className="px-10 mx-auto space-y-6">
       <input
         type="text"
         value={search}
