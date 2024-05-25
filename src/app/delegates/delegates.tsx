@@ -52,7 +52,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
   console.log(delegates);
 
   return (
-    <div className="min-w px-10 mx-auto space-y-6 py-6 max-h-svh overflow-scroll">
+    <div className="min-w px-10 mx-auto space-y-6 py-6">
       <input
         type="text"
         value={search}
@@ -61,13 +61,20 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
         placeholder="Filter delegates"
       />
       {delegates
-        .filter((delegate) =>
-         (delegate.name == undefined && delegate.wallet.toLowerCase().includes(search.toLowerCase())) ||  delegate.name?.toLowerCase().includes(search.toLowerCase())
+        .filter(
+          (delegate) =>
+            (delegate.name == undefined &&
+              delegate.wallet.toLowerCase().includes(search.toLowerCase())) ||
+            delegate.name?.toLowerCase().includes(search.toLowerCase())
         )
-        .filter((delegate) => delegate.votingpower/delegate.maxvotingpower > 0.05)
+        .filter(
+          (delegate) => delegate.votingpower / delegate.maxvotingpower > 0.05
+        )
         .sort((a, b) => b.votingpower - a.votingpower)
         .map((delegate, index) => {
-          const dp = delegateProbabilities.find(d => d.wallet === delegate.wallet);
+          const dp = delegateProbabilities.find(
+            (d) => d.wallet === delegate.wallet
+          );
           const state = dp ? dp.probability : 0;
           // console.log("render",delegate.wallet)
 
