@@ -43,10 +43,10 @@ const Results = ({ dao, delegateProbabilities, showScores, onChange }: Delegates
     }
     onChange(newDps);
   };
-  console.log(dCon.delegates);
 
   return (
-        <div>
+    // ranbow border
+        <div className="b-1">
             <DelegateCluster />
         </div>
   );
