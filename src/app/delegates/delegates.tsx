@@ -18,15 +18,17 @@ interface DelegatesProps {
 
 const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: DelegatesProps) => {
   const [search, setSearch] = useState<string>("");
-  const [delegates, setDelegates] = useState<Delegate[]>([]);
+  // const [delegates, setDelegates] = useState<Delegate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const dCon = useContext(DelegateContext);
 
 
   
   useEffect(() => {
     getDelegates(dao.id).then(delegates => {
-      setDelegates(delegates);
+      // setDelegates(delegates);
+      dCon.setDelegates(delegates);
       setLoading(false);
     }).catch(error => {
       setError(`Failed to fetch Delegates for DAO ${dao.name}.`);
@@ -52,7 +54,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
     }
     onChange(newDps);
   };
-  console.log(delegates);
+  console.log(dCon.delegates);
 
   return (
     <div className="min-w px-10 mx-auto space-y-6 py-6">
@@ -63,7 +65,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
         className="w-full px-10 py-4 bg-slate-100 rounded-md text-center"
         placeholder="Filter delegates"
       />
-      {delegates
+      {dCon.delegates
         .filter(
           (delegate) =>
             (delegate.name == undefined &&

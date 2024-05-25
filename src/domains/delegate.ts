@@ -4,3 +4,10 @@ export interface Delegate {
   logo?: string;
   votingpower: number;
 }
+
+export interface APIDelProb {
+  voter: string;
+  similarity_ratio: number;
+  overall: number;
+  weighted_score: number;
+}

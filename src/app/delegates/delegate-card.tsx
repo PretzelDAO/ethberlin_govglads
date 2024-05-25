@@ -48,11 +48,11 @@ const DelegateCard = ({
     onChange(state === newState ? 0 : newState);
   };
   const dCon = useContext(DelegateContext);
-  const selectedDelegates = dCon.delegates;
+  const selectedDelegates = dCon.selectedDelegates;
   const thisDelegate = selectedDelegates.find((d) => d.wallet === wallet);
   console.log(thisDelegate, selectedDelegates);
   if(thisDelegate){
-    expectation = thisDelegate.state < 0 ? "against" : thisDelegate.state > 0 ? "for" : "neutral";
+    expectation = thisDelegate.probability < 0 ? "against" : thisDelegate.probability > 0 ? "for" : "neutral";
   }
   return (
     <div
@@ -68,10 +68,9 @@ const DelegateCard = ({
       <div className="px-10 py-4 grid grid-cols-[max-content,auto,max-content] items-center gap-10">
         <button type="button" onClick={() => {
           if(thisDelegate){
-            dCon.setDelegates(selectedDelegates.filter((d) => d.wallet !== wallet));
+            dCon.setSelectedDelegates(selectedDelegates.filter((d) => d.wallet !== wallet));
           }else{
-                    console.log("setting",[...dCon.delegates,{'wallet':wallet, 'state':-1}])
-                    dCon.setDelegates( [...dCon.delegates,{'wallet':wallet, 'state':-1}])
+                    dCon.setSelectedDelegates( [...dCon.selectedDelegates,{'wallet':wallet, 'probability':-1}])
           }
         }}>
           <Image src={ampelmannRedPic} alt="" width={40} />
@@ -86,11 +85,10 @@ const DelegateCard = ({
         </div>
         <button type="button" onClick={() => {
           if(thisDelegate){
-            dCon.setDelegates(selectedDelegates.filter((d) => d.wallet !== wallet));
+            dCon.setSelectedDelegates(selectedDelegates.filter((d) => d.wallet !== wallet));
           }
           else{
-                    console.log("setting",[...dCon.delegates,{'wallet':wallet, 'state':-1}])
-                    dCon.setDelegates( [...dCon.delegates,{'wallet':wallet, 'state':1}])
+                    dCon.setSelectedDelegates( [...dCon.selectedDelegates,{'wallet':wallet, 'probability':1}])
           }
         }}>
           <Image src={ampelmannGreenPic} alt="" width={40} />

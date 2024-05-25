@@ -1,13 +1,14 @@
 "use client";
 
 import Delegates from "@/app/delegates/delegates";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./proposal.scss";
 import { submitProposal } from "@/app/services";
 import { ProposalResponse, type DelegateProbability } from "@/domains/proposal";
 import Loading from "@/app/components/loading";
 import type { Dao } from "@/domains/dao";
 import SubmitButton from "./submit-button";
+import { DelegateContext } from "@/providers/stateProvider";
 
 interface ProposalProps {
   dao: Dao;
@@ -20,6 +21,7 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
     useState<DelegateProbability[]>([]);
   const [score, setScore] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
+  const dCon = useContext(DelegateContext);
 
   if (loading) {
     return <Loading msg={"Calculating your proposal's score"} />;
@@ -47,7 +49,20 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
       {score !== -1 && (
         <p>The probability of your proposal passing is: {score}</p>
       )}
-      <SubmitButton disabled={disabled} />
+      <SubmitButton disabled={disabled} onClick={()=>{
+        submitProposal(dao.id, {
+          proposal, delegates: dCon.selectedDelegates}).then((response: ProposalResponse) => {
+          // setScore(response.score);
+          dCon.setDelegates(response.delegates);
+          console.log(response);
+          setLoading(false);
+          
+          }).catch((error) => {
+            console.error(error);
+            setLoading(false);
+          }
+        );
+      }} />
     </div>
   );
 };
