@@ -3,10 +3,12 @@
 import type { Delegate } from "@/domains/delegate";
 import { Dao } from "@/domains/dao";
 import DelegateCard from "./delegate-card";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getDelegates } from "@/app/services";
 import Loading from "@/app/components/loading";
 import type { DelegateProbability } from "@/domains/proposal";
+import { DelegateContext } from "@/providers/stateProvider";
+import Results from "../results/results";
 
 interface DelegatesProps {
   dao: Dao;
@@ -17,13 +19,17 @@ interface DelegatesProps {
 
 const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: DelegatesProps) => {
   const [search, setSearch] = useState<string>("");
-  const [delegates, setDelegates] = useState<Delegate[]>([]);
+  // const [delegates, setDelegates] = useState<Delegate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const dCon = useContext(DelegateContext);
 
+
+  
   useEffect(() => {
     getDelegates(dao.id).then(delegates => {
-      setDelegates(delegates);
+      // setDelegates(delegates);
+      dCon.setDelegates(delegates);
       setLoading(false);
     }).catch(error => {
       setError(`Failed to fetch Delegates for DAO ${dao.name}.`);
@@ -49,9 +55,11 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
     }
     onChange(newDps);
   };
+  console.log(dCon.delegates);
+
 
   return (
-    <div className="max-w-xl mx-auto space-y-6 py-6">
+    <div className="px-10 mx-auto space-y-6">
       <input
         type="text"
         value={search}
@@ -59,23 +67,34 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
         className="w-full px-10 py-4 bg-slate-100 rounded-md text-center"
         placeholder="Filter delegates"
       />
-      {delegates
-        .filter((delegate) =>
-          delegate.name.toLowerCase().includes(search.toLowerCase())
+      {dCon.delegates
+        .filter(
+          (delegate) =>
+            (delegate.name == undefined &&
+              delegate.wallet.toLowerCase().includes(search.toLowerCase())) ||
+            delegate.name?.toLowerCase().includes(search.toLowerCase())
         )
-        .sort((a, b) => b.votingPower - a.votingPower)
+        .filter(
+          (delegate) => delegate.votingpower / delegate.maxvotingpower > 0.05
+        )
+        .sort((a, b) => b.votingpower - a.votingpower)
         .map((delegate, index) => {
-          const dp = delegateProbabilities.find(d => d.wallet === delegate.wallet);
-          const state = dp ? dp.probability : 0;
+          // const dp = delegateProbabilities.find(
+          //   (d) => d.wallet === delegate.wallet
+          // );
+          // const state = dp ? dp.probability : 0;
+          // console.log("render",delegate.wallet)
 
           return (
             <DelegateCard
               key={index}
               name={delegate.name}
-              votingPower={delegate.votingPower}
-              state={state}
+              votingPower={delegate.votingpower}
+              wallet={delegate.wallet}
+              state={delegate.score}
               showScore={showScores}
               onChange={(newState) => toggled(delegate, newState)}
+              maxvotingpower={delegate.maxvotingpower}
             />
           );
         })}
