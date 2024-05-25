@@ -105,7 +105,7 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
                   delProbs[d.voter] = d.weighted_score;
                 }
               });
-              // dCon.setFinalResults(response);
+              dCon.setFinalResults(response);
               dCon.setDelegates(
                 dCon.delegates.map((d) => {
                   return { ...d, score: delProbs[d.wallet] };

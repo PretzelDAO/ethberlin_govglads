@@ -116,10 +116,12 @@ const Delegates = () => {
   };
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div className="w-full h-full">
       <ForceGraph2D
         ref={fgRef}
         graphData={data}
+        width={400}
+        height={400}
         nodeCanvasObject={(node, ctx, globalScale) => {
           const referenceNode = data.nodes.reduce((maxNode, currentNode) => {
             return currentNode.votingPower > maxNode.votingPower
