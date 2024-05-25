@@ -24,10 +24,17 @@ export default function Header() {
   }, [signedAccountId, wallet]);
 
   return (
-    <header className="shadow-lg">
-      <Image src={logo} alt="" height={56} />
-      <h1>Governance Gladiators</h1>
-      <button className="btn btn-secondary float-right pt-4" onClick={action as any} > {label} </button>
-    </header>
+    <div className="h-[calc(56px+10px+10px)]">
+      <header>
+        <Image src={logo} alt="" height={56} />
+        <h1>Governance Gladiators</h1>
+        { dao &&
+            <div className="welcome">
+                <img className="dao-logo" src={dao.logo} alt="DAO Logo" />
+                <h3>Welcome to {dao.name} Arena</h3>
+            </div>
+        }
+      </header>
+    </div>
   );
 }

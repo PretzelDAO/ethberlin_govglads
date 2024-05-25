@@ -23,7 +23,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="h-full">
-      <body className={`${inter.className} h-full pt-[calc(56px+10px+10px)]`}>
+      <body className={inter.className}>
         <NearContext.Provider value={{ wallet, signedAccountId }}>
           <Header />
           <DelegateContextProvider>{children}</DelegateContextProvider>
