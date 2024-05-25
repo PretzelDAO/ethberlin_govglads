@@ -17,9 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
-      <body className={`${inter.className} h-full pt-[calc(56px+10px+10px)]`}>
-        <Header />
+    <html lang="en">
+      <body className={inter.className}>
         <DelegateContextProvider>{children}</DelegateContextProvider>
       </body>
     </html>

@@ -1,0 +1,54 @@
+.delegates {
+    margin: 0 !important;
+
+    input {
+        margin: 10px;
+        background: transparent;
+        border: 1px solid;
+        width: calc(100% - 20px);
+    }
+
+    .supporters, .non-supporters, .delegate-pool {
+        text-align: center;
+        .grid {
+            padding: 10px;
+        }
+        h4 {
+            font-weight: bold;
+        }
+    }
+
+    .droppable {
+        height: 100%;
+    }
+
+    .delegate-pool {
+        border-left: 1px solid;
+        border-right: 1px solid;
+    }
+}
+
+.card {
+    border-radius: 100px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+
+    .vp {
+        position: absolute;
+        margin: auto;
+        left: 0;
+        right: 0;
+        font-size: smaller;
+        top: -13px;
+    }
+
+    .vp2 {
+        position: absolute;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: -28px;
+        font-size: smaller;
+    }
+}
