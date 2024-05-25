@@ -25,6 +25,9 @@ const Page = () => {
         },
       ],
     });
+    const resize = () => chart.resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
   }, []);
 
   return <div ref={ref} className="h-80"></div>;
