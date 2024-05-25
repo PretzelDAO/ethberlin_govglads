@@ -3,12 +3,13 @@
 import type { Delegate } from "@/domains/delegate";
 import { Dao } from "@/domains/dao";
 import DelegateCard from "./delegate-card";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getDelegates } from "@/app/services";
 import Loading from "@/app/components/loading";
 import type { DelegateProbability } from "@/domains/proposal";
 import "./delegates.scss";
-import { DndContext, useDroppable } from '@dnd-kit/core';
+import { DndContext, useDroppable } from "@dnd-kit/core";
+import { DelegateContext } from "@/providers/stateProvider";
 
 interface DelegatesProps {
   dao: Dao;
@@ -17,31 +18,46 @@ interface DelegatesProps {
   onChange: (DelegateProbability: DelegateProbability[]) => void;
 }
 
-function normalize(num: number, numbers: number[], newMin: number = 70, newMax: number = 100): number {
+function normalize(
+  num: number,
+  numbers: number[],
+  newMin: number = 70,
+  newMax: number = 100
+): number {
   const min = Math.min(...numbers);
   const max = Math.max(...numbers);
 
   return newMin + ((num - min) / (max - min)) * (newMax - newMin);
 }
 
-const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: DelegatesProps) => {
+const Delegates = ({
+  dao,
+  delegateProbabilities,
+  showScores,
+  onChange,
+}: DelegatesProps) => {
   const [search, setSearch] = useState<string>("");
   const [delegates, setDelegates] = useState<Delegate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const dCon = useContext(DelegateContext);
+  delegateProbabilities = dCon.selectedDelegates;
 
   useEffect(() => {
-    getDelegates(dao.id).then(delegates => {
-      setDelegates(delegates);
-      setLoading(false);
-    }).catch(error => {
-      setError(`Failed to fetch Delegates for DAO ${dao.name}.`);
-      setLoading(false);
-    });
+    getDelegates(dao.id)
+      .then((delegates) => {
+        // setDelegates(delegates);
+        dCon.setDelegates(delegates);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(`Failed to fetch Delegates for DAO ${dao.name}.`);
+        setLoading(false);
+      });
   }, []);
 
   if (loading) {
-    return <Loading msg={`Loading delegates for DAO ${dao.name}`}/>;
+    return <Loading msg={`Loading delegates for DAO ${dao.name}`} />;
   }
 
   if (error) {
@@ -49,26 +65,31 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
   }
 
   const toggled = (wallet: string, newState: number) => {
-    let newDps = delegateProbabilities.filter(d => d.wallet !== wallet);
+    let newDps = delegateProbabilities.filter((d) => d.wallet !== wallet);
     if (newState !== 0) {
-        newDps.push({
-            wallet,
-            probability: newState
-        });
+      newDps.push({
+        wallet,
+        probability: newState,
+      });
     }
     onChange(newDps);
   };
 
-  const votingPowers = delegates.map(d => d.votingPower);
+  const votingPowers = delegates.map((d) => d.votingpower);
 
   const renderDelegates = (dels: Delegate[]) => {
     return dels
-      .filter((delegate) =>
-        delegate.name.toLowerCase().includes(search.toLowerCase())
+      .filter(
+        (delegate) =>
+          (delegate.name == undefined &&
+            delegate.wallet.toLowerCase().includes(search.toLowerCase())) ||
+          delegate.name?.toLowerCase().includes(search.toLowerCase())
       )
-      .sort((a, b) => b.votingPower - a.votingPower)
+      .sort((a, b) => b.votingpower - a.votingpower)
       .map((delegate, index) => {
-        const dp = delegateProbabilities.find(d => d.wallet === delegate.wallet);
+        const dp = delegateProbabilities.find(
+          (d) => d.wallet === delegate.wallet
+        );
         const state = dp ? dp.probability : 0;
 
         return (
@@ -76,29 +97,38 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
             key={index}
             delegate={delegate}
             state={state}
-            size={normalize(delegate.votingPower, votingPowers)}
+            size={normalize(delegate.votingpower, votingPowers)}
             showScore={showScores}
             onChange={(newState) => toggled(delegate.wallet, newState)}
           />
         );
       });
-  }
+  };
 
   const filterDelegates = (side: number) => {
-    return delegates.filter(d =>
-        delegateProbabilities.find(dp => d.wallet === dp.wallet && dp.probability === side)
+    return dCon.delegates.filter((d) =>
+      delegateProbabilities.find(
+        (dp) => d.wallet === dp.wallet && dp.probability === side
+      )
     );
   };
 
   const supporters = filterDelegates(1);
   const nonSupporters = filterDelegates(-1);
-  const neutral = delegateProbabilities.length ? delegates.filter(d =>
-      !delegateProbabilities.find(dp => d.wallet === dp.wallet && (dp.probability === -1 || dp.probability === 1))
-  ) : delegates;
+  const neutral = delegateProbabilities.length
+    ? dCon.delegates.filter(
+        (d) =>
+          !delegateProbabilities.find(
+            (dp) =>
+              d.wallet === dp.wallet &&
+              (dp.probability === -1 || dp.probability === 1)
+          )
+      )
+    : delegates;
 
   function handleDragEnd({ active, over }: any) {
     if (!active || !over) {
-        return;
+      return;
     }
 
     const wallet = active.id;
@@ -106,9 +136,9 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
 
     let newState = 0;
     if (droppableId == "non-supporters") {
-        newState = -1;
+      newState = -1;
     } else if (droppableId == "supporters") {
-        newState = 1;
+      newState = 1;
     }
 
     toggled(wallet, newState);
@@ -130,7 +160,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
             <Droppable id="supporters">
               <h4>Supporters</h4>
               <div className="grid grid-cols-2 gap-10">
-              {renderDelegates(supporters)}
+                {renderDelegates(supporters)}
               </div>
             </Droppable>
           </div>
@@ -138,7 +168,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
             <Droppable id="pool">
               <h4>All Delegates</h4>
               <div className="grid grid-cols-9 gap-10">
-              {renderDelegates(neutral)}
+                {renderDelegates(neutral)}
               </div>
             </Droppable>
           </div>
@@ -146,13 +176,12 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
             <Droppable id="non-supporters">
               <h4>Non-Supporters</h4>
               <div className="grid grid-cols-2 gap-10">
-              {renderDelegates(nonSupporters)}
+                {renderDelegates(nonSupporters)}
               </div>
             </Droppable>
           </div>
         </div>
       </DndContext>
-
     </div>
   );
 };

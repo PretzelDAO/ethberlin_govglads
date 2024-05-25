@@ -31,9 +31,9 @@ const DelegateCard = ({
   onChange,
 }: Props) => {
   let expectation = "neutral";
-  if ((state??0) < 0) {
+  if ((state ?? 0) < 0) {
     expectation = "against";
-  } else if ((state??0 )> 0) {
+  } else if ((state ?? 0) > 0) {
     expectation = "for";
   }
 
@@ -51,8 +51,13 @@ const DelegateCard = ({
   const selectedDelegates = dCon.selectedDelegates;
   const thisDelegate = selectedDelegates.find((d) => d.wallet === wallet);
   // console.log(state, selectedDelegates);
-  if(thisDelegate){
-    expectation = thisDelegate.probability < 0 ? "against" : thisDelegate.probability > 0 ? "for" : "neutral";
+  if (thisDelegate) {
+    expectation =
+      thisDelegate.probability < 0
+        ? "against"
+        : thisDelegate.probability > 0
+        ? "for"
+        : "neutral";
   }
   return (
     <div
@@ -66,35 +71,49 @@ const DelegateCard = ({
       )}
     >
       <div className="px-10 py-4 grid grid-cols-[max-content,auto,max-content] items-center gap-10">
-        <button type="button" onClick={() => {
-          if(thisDelegate){
-            dCon.setSelectedDelegates(selectedDelegates.filter((d) => d.wallet !== wallet));
-          }else{
-                    dCon.setSelectedDelegates( [...dCon.selectedDelegates,{'wallet':wallet, 'probability':-1}])
-          }
-        }}>
+        <button
+          type="button"
+          onClick={() => {
+            if (thisDelegate) {
+              dCon.setSelectedDelegates(
+                selectedDelegates.filter((d) => d.wallet !== wallet)
+              );
+            } else {
+              dCon.setSelectedDelegates([
+                ...dCon.selectedDelegates,
+                { wallet: wallet, probability: -1 },
+              ]);
+            }
+          }}
+        >
           <Image src={ampelmannRedPic} alt="" width={40} />
         </button>
-        <div onClick={() => {
-        }}>
+        <div onClick={() => {}}>
           <p>
             {name ?? makeNiceAddress(wallet)} ({Math.round(votingPower / 1000)}
             k)
           </p>
-          <p>Probability: {Math.ceil(Math.abs(state??0)*100)}%</p>
+          <p>Probability: {Math.ceil(Math.abs(state ?? 0) * 100)}%</p>
         </div>
-        <button type="button" onClick={() => {
-          if(thisDelegate){
-            dCon.setSelectedDelegates(selectedDelegates.filter((d) => d.wallet !== wallet));
-          }
-          else{
-                    dCon.setSelectedDelegates( [...dCon.selectedDelegates,{'wallet':wallet, 'probability':1}])
-          }
-        }}>
+        <button
+          type="button"
+          onClick={() => {
+            if (thisDelegate) {
+              dCon.setSelectedDelegates(
+                selectedDelegates.filter((d) => d.wallet !== wallet)
+              );
+            } else {
+              dCon.setSelectedDelegates([
+                ...dCon.selectedDelegates,
+                { wallet: wallet, probability: 1 },
+              ]);
+            }
+          }}
+        >
           <Image src={ampelmannGreenPic} alt="" width={40} />
         </button>
       </div>
-      <VotingPowerBar fill={(votingPower/maxvotingpower)} />
+      <VotingPowerBar fill={votingPower / maxvotingpower} />
     </div>
   );
 };
