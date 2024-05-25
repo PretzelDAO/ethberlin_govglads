@@ -20,20 +20,10 @@ interface DelegatesProps {
 const Results = ({ dao, delegateProbabilities, showScores, onChange }: DelegatesProps) => {
   const [search, setSearch] = useState<string>("");
   // const [delegates, setDelegates] = useState<Delegate[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const dCon = useContext(DelegateContext);
   
-  useEffect(() => {
-    getDelegates(dao.id).then(delegates => {
-      // setDelegates(delegates);
-      dCon.setDelegates(delegates);
-      setLoading(false);
-    }).catch(error => {
-      setError(`Failed to fetch Delegates for DAO ${dao.name}.`);
-      setLoading(false);
-    });
-  }, []);
 
   if (loading) {
     return <Loading msg={`Loading delegates for DAO ${dao.name}`}/>;

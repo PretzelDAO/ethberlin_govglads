@@ -70,17 +70,16 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
           // setScore(response.score);
           const delProbs:any={}
           response.probabilities.forEach((d)=>{
-            delProbs[d.voter]=d.weighted_score;
+            delProbs[d.voter]=d.similarity_ratio;
           });
+          // dCon.setFinalResults(response);
           dCon.setDelegates(dCon.delegates.map((d)=>{
             return {...d, score: delProbs[d.wallet]}
             }));
-            dCon.setFinalResults(response);
+          console.log("SET RES",response);
 
-          setShowResults(true);
-          
-          console.log(response);
           setLoading(false);
+          setShowResults(true);
           
           }).catch((error) => {
             console.error(error);
