@@ -49,6 +49,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
     }
     onChange(newDps);
   };
+  console.log(delegates);
 
   return (
     <div className="max-w-xl mx-auto space-y-6 py-6">
@@ -61,18 +62,20 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
       />
       {delegates
         .filter((delegate) =>
-          delegate.name.toLowerCase().includes(search.toLowerCase())
+         delegate.name == undefined ||  delegate.name?.toLowerCase().includes(search.toLowerCase())
         )
-        .sort((a, b) => b.votingPower - a.votingPower)
+        .sort((a, b) => b.votingpower - a.votingpower)
         .map((delegate, index) => {
           const dp = delegateProbabilities.find(d => d.wallet === delegate.wallet);
           const state = dp ? dp.probability : 0;
+          console.log("render",delegate.wallet)
 
           return (
             <DelegateCard
               key={index}
               name={delegate.name}
-              votingPower={delegate.votingPower}
+              votingPower={delegate.votingpower}
+              wallet={delegate.wallet}
               state={state}
               showScore={showScores}
               onChange={(newState) => toggled(delegate, newState)}

@@ -5,9 +5,11 @@ import ampelmannGreenPic from "@/images/ampelmann-green.svg";
 import ampelmannRedPic from "@/images/ampelmann-red.svg";
 import { useState } from "react";
 import composeClassName from "@/utils/compose-class-name";
+import { makeNiceAddress } from "@/utils/stringutils";
 
 interface Props {
-  name: string;
+  name?: string;
+  wallet: string;
   votingPower: number;
   state: number;
   showScore: boolean;
@@ -16,7 +18,7 @@ interface Props {
 
 type Expectation = "neutral" | "for" | "against";
 
-const DelegateCard = ({ name, votingPower, state, showScore, onChange }: Props) => {
+const DelegateCard = ({ name, votingPower, state,wallet, showScore, onChange }: Props) => {
   let expectation = "neutral";
   if (state < 0) {
     expectation = "against";
@@ -55,7 +57,7 @@ const DelegateCard = ({ name, votingPower, state, showScore, onChange }: Props) 
         <Image src={ampelmannRedPic} alt="" width={40} />
       </button>
       <div onClick={() => toggleExpectation("neutral")}>
-        <p>{name} ({votingPower})</p>
+        <p>{name??makeNiceAddress(wallet)} ({Math.round(votingPower/1000)}k)</p>
         <p>Probability: {Math.abs(state)}%</p>
       </div>
       <button type="button" onClick={() => toggleExpectation("for")}>

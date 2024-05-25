@@ -7,9 +7,11 @@ export const GET = async (request: NextRequest) => {
   const daoId = searchParams.get("id");
 
   const result = await db((client) => {
-    return client.query(`SELECT 1+1 AS result`);
+    return client.query(
+      `SELECT voter as wallet, vp as votingPower from arbitrum_vp`
+    );
   });
-  console.log(result);
+  console.log(result.rows);
 
-  return NextResponse.json(delegates, { status: 200 });
+  return NextResponse.json(result.rows, { status: 200 });
 };
