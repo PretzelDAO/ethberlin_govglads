@@ -20,6 +20,7 @@ const Delegates = () => {
             ? d.name?.substring(0, 6) + "..."
             : d.name?.split(" ")[0] || d.wallet,
           votingPower: d.votingpower / 100000,
+          gladiatorScore: (d.votingpower / d.maxvotingpower) * 450,
           score: d.score,
         };
       }),
@@ -66,29 +67,27 @@ const Delegates = () => {
     const label = node.name;
     const fontSize = 12 / globalScale;
     const radius = Math.sqrt(node.votingPower) * 5;
-
+  
     if (!isFinite(node.x) || !isFinite(node.y) || !isFinite(radius)) {
-      //console.error("Invalid values for node position or radius", { node, radius });
       return;
     }
-
+  
     const dx = node.x - referenceNode.x;
     const dy = node.y - referenceNode.y;
     const distanceFromReference = Math.sqrt(dx * dx + dy * dy);
-
+  
     const color = getColorForDistance(referenceNode.id, distanceFromReference);
-
+  
     const intersectionPoint = getIntersectionPoint(
       referenceNode,
       node,
       Math.sqrt(referenceNode.votingPower) * 5
     );
-
+  
     if (!isFinite(intersectionPoint.x) || !isFinite(intersectionPoint.y)) {
-      //console.error("Invalid intersection point", { intersectionPoint });
       return;
     }
-
+  
     const gradient = ctx.createRadialGradient(
       intersectionPoint.x,
       intersectionPoint.y,
@@ -99,21 +98,65 @@ const Delegates = () => {
     );
     gradient.addColorStop(0, color);
     gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-
+  
     ctx.beginPath();
     ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
     ctx.fillStyle = gradient;
     ctx.fill();
-
+  
     ctx.strokeStyle = "rgba(0, 0, 0, 0.2)";
     ctx.stroke();
+  
+    // Draw the gladiator image
+    const gladiatorImage = new Image();
+    gladiatorImage.src = getGladiatorImage(node.gladiatorScore); // Adjust this to use your score logic
+      const imgSize = radius * 2; // Adjust size as needed
+  
+      // Save the current context state
+      ctx.save();
+  
+      // Create a circular clipping path
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
+      ctx.clip();
+  
+      // Draw the image within the clipped path
+      ctx.drawImage(gladiatorImage, node.x - radius*0.8, node.y - radius*0.8, imgSize * 0.8, imgSize* 0.8);
+  
+      // Restore the context to its original state
+      ctx.restore();
 
-    ctx.font = `${fontSize}px Sans-Serif`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = "black";
-    ctx.fillText(label, node.x, node.y);
+      ctx.font = `${fontSize}px Sans-Serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "white";
+      ctx.fillText(label, node.x, node.y);
   };
+  
+  const getGladiatorImage = (score) => {
+    if (score >= 100) {
+      return "/images/gladiators/gladiator_level10.jpg";
+    } else if (score >= 70) {
+      return "/images/gladiators/gladiator_level9.jpg";
+    } else if (score >= 60) {
+      return "/images/gladiators/gladiator_level8.jpg";
+    } else if (score >= 50) {
+      return "/images/gladiators/gladiator_level7.jpg";
+    } else if (score >= 40) {
+      return "/images/gladiators/gladiator_level6.jpg";
+    } else if (score >= 30) {
+      return "/images/gladiators/gladiator_level5.jpg";
+    } else if (score >= 20) {
+      return "/images/gladiators/gladiator_level4.jpg";
+    } else if (score >= 10) {
+      return "/images/gladiators/gladiator_level3.jpg";
+    } else if (score >= 5) {
+      return "/images/gladiators/gladiator_level2.jpg";
+    } else {
+      return "/images/gladiators/gladiator_level1.jpg";
+    }
+  };
+  
 
   return (
     <div className="w-full h-full">
@@ -147,7 +190,7 @@ const Delegates = () => {
           ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
           ctx.fill();
         }}
-        onNodeClick={(node) => alert(`Clicked on ${node.name}`)}
+        onNodeClick={(node) => console.log(`Clicked on ${node.name}`)}
       />
     </div>
   );
