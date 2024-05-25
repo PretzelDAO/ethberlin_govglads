@@ -169,7 +169,7 @@ const Delegates = ({
           </div>
           <div className="delegate-pool flex flex-col w-2/3">
             <Droppable id="pool">
-              <h4>All Delegates</h4>
+              <h4 style={{ marginBottom: "18px" }}>All Delegates</h4>
               <div className="grid grid-cols-9 gap-10">
                 {renderDelegates(neutral)}
               </div>

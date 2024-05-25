@@ -101,11 +101,13 @@ const DelegateCard = ({
       {...listeners}
       {...attributes}
     >
-      <p className="vp">
-        {" "}
+      <div className="vp">
         ({(delegate.votingpower / 1000000).toFixed(2)} M)
-        <br /> VP
-      </p>
+      </div>
+      <div className="vp2">
+        {delegate.name?.startsWith('0x') ? (delegate.name?.substring(0,6)+"...") : (delegate.name?.split(' ')[0] || `${delegate.wallet.substring(0,6)}...`)}
+      </div>
+      
     </div>
   );
 };
