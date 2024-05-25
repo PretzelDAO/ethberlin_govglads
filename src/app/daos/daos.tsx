@@ -5,6 +5,7 @@ import { Dao } from "@/domains/dao";
 import React, { useEffect, useState } from 'react';
 import "./daos.scss";
 import { getDaos } from "@/app/services";
+import Loading from "@/app/components/loading.tsx";
 
 interface DaoComponentProps {
   dao: Dao;
@@ -29,18 +30,18 @@ function Daos({ daoSelected }: DaosProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-      getDaos().then(daos => {
-        setDaos(daos);
-        setLoading(false);
-      }).catch(error => {
-        setError('Failed to fetch DAOs');
-        setLoading(false);
-      });
-    }, []);
+  useEffect(() => {
+    getDaos().then(daos => {
+      setDaos(daos);
+      setLoading(false);
+    }).catch(error => {
+      setError('Failed to fetch DAOs');
+      setLoading(false);
+    });
+  }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading msg="Loading DAOs"/>;
   }
 
   if (error) {

@@ -1,11 +1,13 @@
 "use client";
 
-import Page from "@/app/delegates/page";
+import Delegates from "@/app/delegates/delegates";
 import DelegateCard from "./delegate-card";
 import { useState } from "react";
 import "./proposal.scss";
 import { submitProposal } from "@/app/services";
 import { Delegate } from "@/domains/delegate";
+import { ProposalResponse } from "@/domains/proposal";
+import Loading from "@/app/components/loading.tsx";
 
 
 interface ProposalProps {
@@ -15,15 +17,27 @@ interface ProposalProps {
 
 const Proposal = ({ dao, onSubmit }: ProposalProps) => {
   const [proposal, setProposal] = useState<string>("");
-  const [selectedDelegates, setSelectedDelegates] = useState<Delegate[]>([]);
+  const [selectedDelegateProbabilities, setSelectedDelegateProbabilities] = useState<DelegateProbability[]>([]);
+  const [score, setScore] = useState<number>(-1);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setScore(-1);
+    setLoading(true);
     submitProposal(dao.id, {
         proposal,
-        delegates: selectedDelegates
-    });
+        delegates: selectedDelegateProbabilities
+    }).then((res: ProposalResponse) => {
+        setScore(res.score);
+        setSelectedDelegateProbabilities(res.delegates);
+    }).finally(() => setLoading(false));
   };
+
+  if (loading) {
+    return <Loading msg={"Calculating your proposal's score"}/>;
+  }
+
 
   const disabled = !proposal;
 
@@ -38,7 +52,13 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
         placeholder="Type your new proposal..."
       />
       <h3>2. Select your delegates:</h3>
-      <Page/>
+      <Delegates
+        showScores={score !== -1}
+        dao={dao}
+        delegateProbabilities={selectedDelegateProbabilities}
+        onChange={setSelectedDelegateProbabilities}
+      />
+      {score !== -1 && <p>The probability of your proposal passing is: {score}</p>}
       <button
         type="submit"
         disabled={disabled}

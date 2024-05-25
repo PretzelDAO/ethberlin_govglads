@@ -9,15 +9,30 @@ import composeClassName from "@/utils/compose-class-name";
 interface Props {
   name: string;
   votingPower: number;
+  state: number;
+  showScore: boolean;
+  onChange: (number) => void;
 }
 
 type Expectation = "neutral" | "for" | "against";
 
-const DelegateCard = ({ name, votingPower }: Props) => {
-  const [expectation, setExpectation] = useState<Expectation>("neutral");
+const DelegateCard = ({ name, votingPower, state, showScore, onChange }: Props) => {
+  let expectation = "neutral";
+  if (state < 0) {
+    expectation = "against";
+  } else if (state > 0) {
+    expectation = "for";
+  }
 
   const toggleExpectation = (newExpectation: Expectation) => {
-    setExpectation(expectation === newExpectation ? "neutral" : newExpectation);
+    let newState = 0;
+    if (newExpectation == "against") {
+        newState = -1;
+    } else if (newExpectation == "for") {
+        newState = 1;
+    }
+
+    onChange(state === newState ? 0 : newState);
   };
 
   return (
@@ -36,13 +51,14 @@ const DelegateCard = ({ name, votingPower }: Props) => {
         "transition-all"
       )}
     >
-      <button onClick={() => toggleExpectation("against")}>
+      <button type="button" onClick={() => toggleExpectation("against")}>
         <Image src={ampelmannRedPic} alt="" width={40} />
       </button>
-      <div>
-        {name} ({votingPower})
+      <div onClick={() => toggleExpectation("neutral")}>
+        <p>{name} ({votingPower})</p>
+        <p>Probability: {Math.abs(state)}%</p>
       </div>
-      <button onClick={() => toggleExpectation("for")}>
+      <button type="button" onClick={() => toggleExpectation("for")}>
         <Image src={ampelmannGreenPic} alt="" width={40} />
       </button>
     </div>
