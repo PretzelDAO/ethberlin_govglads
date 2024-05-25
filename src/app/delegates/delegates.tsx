@@ -52,7 +52,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
   console.log(delegates);
 
   return (
-    <div className="max-w-xl mx-auto space-y-6 py-6">
+    <div className="min-w px-10 mx-auto space-y-6 py-6 max-h-svh overflow-scroll">
       <input
         type="text"
         value={search}

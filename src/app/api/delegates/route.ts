@@ -23,7 +23,7 @@ export const GET = async (request: NextRequest) => {
     }
     return r2;
   });
-  console.log(result.rows);
+  // console.log(result.rows);
 
   return NextResponse.json(result.rows, { status: 200 });
 };
