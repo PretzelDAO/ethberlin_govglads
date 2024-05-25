@@ -20,6 +20,7 @@ const Delegates = () => {
             ? d.name?.substring(0, 6) + "..."
             : d.name?.split(" ")[0] || d.wallet,
           votingPower: d.votingpower / 100000,
+          gladiatorScore: (d.votingpower / d.maxvotingpower) * 450,
           score: d.score,
         };
       }),
@@ -106,27 +107,34 @@ const Delegates = () => {
     ctx.strokeStyle = "rgba(0, 0, 0, 0.2)";
     ctx.stroke();
   
-    ctx.font = `${fontSize}px Sans-Serif`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = "black";
-    ctx.fillText(label, node.x, node.y);
-  
     // Draw the gladiator image
     const gladiatorImage = new Image();
-    gladiatorImage.src = getGladiatorImage(node.score); // Adjust this to use your score logic
-    gladiatorImage.onload = () => {
+    gladiatorImage.src = getGladiatorImage(node.gladiatorScore); // Adjust this to use your score logic
       const imgSize = radius * 2; // Adjust size as needed
-      ctx.drawImage(gladiatorImage, node.x - radius, node.y - radius, imgSize, imgSize);
-    };
+  
+      // Save the current context state
+      ctx.save();
+  
+      // Create a circular clipping path
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
+      ctx.clip();
+  
+      // Draw the image within the clipped path
+      ctx.drawImage(gladiatorImage, node.x - radius*0.8, node.y - radius*0.8, imgSize * 0.8, imgSize* 0.8);
+  
+      // Restore the context to its original state
+      ctx.restore();
+
+      ctx.font = `${fontSize}px Sans-Serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "white";
+      ctx.fillText(label, node.x, node.y);
   };
   
   const getGladiatorImage = (score) => {
     if (score >= 100) {
-      return "/images/gladiators/gladiator_level12.jpg"; // Highest tier
-    } else if (score >= 90) {
-      return "/images/gladiators/gladiator_level11.jpg";
-    } else if (score >= 80) {
       return "/images/gladiators/gladiator_level10.jpg";
     } else if (score >= 70) {
       return "/images/gladiators/gladiator_level9.jpg";
@@ -182,7 +190,7 @@ const Delegates = () => {
           ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
           ctx.fill();
         }}
-        onNodeClick={(node) => alert(`Clicked on ${node.name}`)}
+        onNodeClick={(node) => console.log(`Clicked on ${node.name}`)}
       />
     </div>
   );
