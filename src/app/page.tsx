@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Daos from "@/app/daos/daos";
-import Proposal from "@/app/proposal/proposal.tsx";
-import React, { useEffect, useState } from 'react';
+import Proposal from "@/app/proposal/proposal";
+import React, { useEffect, useState } from "react";
+import type { Dao } from "@/domains/dao";
 
 export default function Home() {
   const [dao, setDao] = useState<Dao | undefined>(undefined);

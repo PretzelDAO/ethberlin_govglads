@@ -11,7 +11,7 @@ interface Props {
   votingPower: number;
   state: number;
   showScore: boolean;
-  onChange: (number) => void;
+  onChange: (number: number) => void;
 }
 
 type Expectation = "neutral" | "for" | "against";

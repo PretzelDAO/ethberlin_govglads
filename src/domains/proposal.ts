@@ -5,10 +5,10 @@ export interface DelegateProbability {
 
 export interface ProposalRequest {
   proposal: string;
-  delegates: [DelegateProbability];
+  delegates: DelegateProbability[];
 }
 
 export interface ProposalResponse {
   score: number;
-  delegates: [DelegateProbability];
+  delegates: DelegateProbability[];
 }

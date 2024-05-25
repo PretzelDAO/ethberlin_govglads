@@ -5,13 +5,14 @@ import { Dao } from "@/domains/dao";
 import DelegateCard from "./delegate-card";
 import { useState, useEffect } from "react";
 import { getDelegates } from "@/app/services";
-import Loading from "@/app/components/loading.tsx";
+import Loading from "@/app/components/loading";
+import type { DelegateProbability } from "@/domains/proposal";
 
 interface DelegatesProps {
-    dao: Dao;
-    showScores: boolean;
-    delegateProbabilities: [DelegateProbability];
-    onChange: ([DelegateProbability]) => void;
+  dao: Dao;
+  showScores: boolean;
+  delegateProbabilities: DelegateProbability[];
+  onChange: (DelegateProbability: DelegateProbability[]) => void;
 }
 
 const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: DelegatesProps) => {

@@ -5,7 +5,7 @@ import { Dao } from "@/domains/dao";
 import React, { useEffect, useState } from 'react';
 import "./daos.scss";
 import { getDaos } from "@/app/services";
-import Loading from "@/app/components/loading.tsx";
+import Loading from "@/app/components/loading";
 
 interface DaoComponentProps {
   dao: Dao;

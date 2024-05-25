@@ -1,13 +1,12 @@
 "use client";
 
 import Delegates from "@/app/delegates/delegates";
-import DelegateCard from "./delegate-card";
 import { useState } from "react";
 import "./proposal.scss";
 import { submitProposal } from "@/app/services";
-import { Delegate } from "@/domains/delegate";
-import { ProposalResponse } from "@/domains/proposal";
-import Loading from "@/app/components/loading.tsx";
+import { ProposalResponse, type DelegateProbability } from "@/domains/proposal";
+import Loading from "@/app/components/loading";
+import type { Dao } from "@/domains/dao";
 
 
 interface ProposalProps {
@@ -42,9 +41,12 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
   const disabled = !proposal;
 
   return (
-    <form className="proposal max-w-xl mx-auto space-y-6 py-6" onSubmit={handleSubmit}>
-      <img className="dao-logo" src={dao.logo} alt="DAO Logo"/>
-      <h3>1. Test a new proposal on "{dao.name}" DAO:</h3>
+    <form
+      className="proposal max-w-xl mx-auto space-y-6 py-6"
+      onSubmit={handleSubmit}
+    >
+      <img className="dao-logo" src={dao.logo} alt="DAO Logo" />
+      <h3>1. Test a new proposal on &quot;{dao.name}&quot; DAO:</h3>
       <textarea
         value={proposal}
         onChange={(e) => setProposal(e.target.value)}
@@ -58,12 +60,18 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
         delegateProbabilities={selectedDelegateProbabilities}
         onChange={setSelectedDelegateProbabilities}
       />
-      {score !== -1 && <p>The probability of your proposal passing is: {score}</p>}
+      {score !== -1 && (
+        <p>The probability of your proposal passing is: {score}</p>
+      )}
       <button
         type="submit"
         disabled={disabled}
         className={`w-full px-6 py-2 rounded-lg text-white font-bold focus:outline-none focus:ring-2 focus:ring-offset-2
-              ${disabled ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 focus:ring-blue-500'}`}
+              ${
+                disabled
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600 focus:ring-blue-500"
+              }`}
       >
         Test proposal now
       </button>
