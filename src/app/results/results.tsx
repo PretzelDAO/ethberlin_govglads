@@ -2,7 +2,6 @@
 
 import type { Delegate } from "@/domains/delegate";
 import { Dao } from "@/domains/dao";
-import DelegateCard from "./delegate-card";
 import { useState, useEffect, useContext } from "react";
 import { getDelegates } from "@/app/services";
 import Loading from "@/app/components/loading";
