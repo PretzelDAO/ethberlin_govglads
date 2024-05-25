@@ -50,7 +50,7 @@ const DelegateCard = ({
     onChange(state === newState ? 0 : newState);
   };
 
-  const getGladiatorImage = (score) => {
+  const getGladiatorImage = (score: number) => {
     score *= 7;
     if (score >= 90) {
       return "/images/gladiators/gladiator_level10.jpg";
