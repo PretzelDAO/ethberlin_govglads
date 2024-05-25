@@ -11,6 +11,7 @@ interface Props {
   name?: string;
   wallet: string;
   votingPower: number;
+  maxvotingpower: number;
   state: number;
   showScore: boolean;
   onChange: (number: number) => void;
@@ -21,6 +22,7 @@ type Expectation = "neutral" | "for" | "against";
 const DelegateCard = ({
   name,
   votingPower,
+  maxvotingpower,
   state,
   wallet,
   showScore,
@@ -70,7 +72,7 @@ const DelegateCard = ({
           <Image src={ampelmannGreenPic} alt="" width={40} />
         </button>
       </div>
-      <VotingPowerBar fill={Math.random()} />
+      <VotingPowerBar fill={(votingPower/maxvotingpower)} />
     </div>
   );
 };

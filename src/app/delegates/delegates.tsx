@@ -68,7 +68,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
         .map((delegate, index) => {
           const dp = delegateProbabilities.find(d => d.wallet === delegate.wallet);
           const state = dp ? dp.probability : 0;
-          console.log("render",delegate.wallet)
+          // console.log("render",delegate.wallet)
 
           return (
             <DelegateCard
@@ -79,6 +79,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
               state={state}
               showScore={showScores}
               onChange={(newState) => toggled(delegate, newState)}
+              maxvotingpower={delegate.maxvotingpower}
             />
           );
         })}
