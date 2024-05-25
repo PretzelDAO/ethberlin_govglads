@@ -66,29 +66,27 @@ const Delegates = () => {
     const label = node.name;
     const fontSize = 12 / globalScale;
     const radius = Math.sqrt(node.votingPower) * 5;
-
+  
     if (!isFinite(node.x) || !isFinite(node.y) || !isFinite(radius)) {
-      //console.error("Invalid values for node position or radius", { node, radius });
       return;
     }
-
+  
     const dx = node.x - referenceNode.x;
     const dy = node.y - referenceNode.y;
     const distanceFromReference = Math.sqrt(dx * dx + dy * dy);
-
+  
     const color = getColorForDistance(referenceNode.id, distanceFromReference);
-
+  
     const intersectionPoint = getIntersectionPoint(
       referenceNode,
       node,
       Math.sqrt(referenceNode.votingPower) * 5
     );
-
+  
     if (!isFinite(intersectionPoint.x) || !isFinite(intersectionPoint.y)) {
-      //console.error("Invalid intersection point", { intersectionPoint });
       return;
     }
-
+  
     const gradient = ctx.createRadialGradient(
       intersectionPoint.x,
       intersectionPoint.y,
@@ -99,21 +97,58 @@ const Delegates = () => {
     );
     gradient.addColorStop(0, color);
     gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-
+  
     ctx.beginPath();
     ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
     ctx.fillStyle = gradient;
     ctx.fill();
-
+  
     ctx.strokeStyle = "rgba(0, 0, 0, 0.2)";
     ctx.stroke();
-
+  
     ctx.font = `${fontSize}px Sans-Serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = "black";
     ctx.fillText(label, node.x, node.y);
+  
+    // Draw the gladiator image
+    const gladiatorImage = new Image();
+    gladiatorImage.src = getGladiatorImage(node.score); // Adjust this to use your score logic
+    gladiatorImage.onload = () => {
+      const imgSize = radius * 2; // Adjust size as needed
+      ctx.drawImage(gladiatorImage, node.x - radius, node.y - radius, imgSize, imgSize);
+    };
   };
+  
+  const getGladiatorImage = (score) => {
+    if (score >= 100) {
+      return "/images/gladiators/gladiator_level12.jpg"; // Highest tier
+    } else if (score >= 90) {
+      return "/images/gladiators/gladiator_level11.jpg";
+    } else if (score >= 80) {
+      return "/images/gladiators/gladiator_level10.jpg";
+    } else if (score >= 70) {
+      return "/images/gladiators/gladiator_level9.jpg";
+    } else if (score >= 60) {
+      return "/images/gladiators/gladiator_level8.jpg";
+    } else if (score >= 50) {
+      return "/images/gladiators/gladiator_level7.jpg";
+    } else if (score >= 40) {
+      return "/images/gladiators/gladiator_level6.jpg";
+    } else if (score >= 30) {
+      return "/images/gladiators/gladiator_level5.jpg";
+    } else if (score >= 20) {
+      return "/images/gladiators/gladiator_level4.jpg";
+    } else if (score >= 10) {
+      return "/images/gladiators/gladiator_level3.jpg";
+    } else if (score >= 5) {
+      return "/images/gladiators/gladiator_level2.jpg";
+    } else {
+      return "/images/gladiators/gladiator_level1.jpg";
+    }
+  };
+  
 
   return (
     <div className="w-full h-full">
