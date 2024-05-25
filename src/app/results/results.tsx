@@ -7,7 +7,10 @@ import { getDelegates } from "@/app/services";
 import Loading from "@/app/components/loading";
 import type { DelegateProbability } from "@/domains/proposal";
 import { DelegateContext } from "@/providers/stateProvider";
-import DelegateCluster from "../delegates/delegate_cluster";
+import dynamic from "next/dynamic";
+const DelegateCluster = dynamic(() => import("../delegates/delegate_cluster"), {
+  ssr: false,
+});
 import { makeNiceAddress } from "@/utils/stringutils";
 
 interface DelegatesProps {
