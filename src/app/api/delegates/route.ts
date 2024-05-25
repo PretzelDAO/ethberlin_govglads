@@ -11,7 +11,7 @@ export const GET = async (request: NextRequest) => {
       `SELECT voter as wallet, vp as votingPower, delegate_name as name from arbitrum_vp left join arb_delegates on arb_delegates.delegate = arbitrum_vp.voter`
     );
   });
-  console.log(result.rows);
+  // console.log(result.rows);
 
   return NextResponse.json(result.rows, { status: 200 });
 };
