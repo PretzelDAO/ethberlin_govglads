@@ -29,7 +29,7 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
         delegates: selectedDelegateProbabilities
     }).then((res: ProposalResponse) => {
         setScore(res.score);
-        setSelectedDelegateProbabilities(res.delegates);
+        setSelectedDelegateProbabilities((res as any).delegates);
     }).finally(() => setLoading(false));
   };
 
