@@ -12,10 +12,19 @@ const SubmitButton = ({ disabled, onClick }: Props) => {
       disabled={disabled}
       onClick={onClick}
       className={composeClassName(
-        "w-full",
-        "px-6",
-        "py-2",
-        "rounded-lg",
+        // reset
+        "!m-0",
+        // float in bottom-center
+        "fixed",
+        "bottom-6",
+        "left-1/2",
+        "-translate-x-1/2",
+        // shape
+        "px-10",
+        "py-3",
+        "rounded-full",
+        // styling
+        "shadow-lg",
         "text-white",
         "font-bold",
         "focus:outline-none",

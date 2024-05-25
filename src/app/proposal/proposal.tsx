@@ -28,7 +28,7 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
   const disabled = !proposal;
 
   return (
-    <div className="proposal max-w-xl mx-auto space-y-6 py-6">
+    <div className="proposal max-w-xl mx-auto space-y-6">
       <img className="dao-logo" src={dao.logo} alt="DAO Logo" />
       <h3>1. Test a new proposal on &quot;{dao.name}&quot; DAO:</h3>
       <textarea
