@@ -6,10 +6,10 @@ export const GET = async (request: NextRequest) => {
   const searchParams = request.nextUrl.searchParams;
   const daoId = searchParams.get("id");
 
-  const result = await db((client) => {
-    return client.query(`SELECT 1+1 AS result`);
-  });
-  console.log(result);
+//   const result = await db((client) => {
+//     return client.query(`SELECT 1+1 AS result`);
+//   });
+//   console.log(result);
 
   return NextResponse.json(delegates, { status: 200 });
 };

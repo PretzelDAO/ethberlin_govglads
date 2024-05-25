@@ -1,0 +1,21 @@
+.proposal {
+    padding: 0 !important;
+    height: 100%;
+    textarea, button {
+        margin: 0 !important;
+    }
+
+    textarea {
+        background: transparent;
+        border: 1px solid;
+    }
+
+    .proposal-section {
+        padding: 0 !important;
+
+        h3 {
+            text-align: center;
+            margin-top: 10px !important;
+        }
+    }
+}
