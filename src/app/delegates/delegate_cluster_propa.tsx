@@ -10,7 +10,6 @@ const Delegates = () => {
   const fgRef = useRef();
 
   const dCon = useContext(DelegateContext);
-  console.log(dCon.delegates);
     const data = {
         nodes: dCon.delegates
         .filter((d) => d.votingpower/d.maxvotingpower > 0.05)
@@ -20,7 +19,6 @@ const Delegates = () => {
                 id: d.wallet,
                 name: d.name,
                 votingPower: d.votingpower / 100000,
-                score: d.score,
             };
         }),
         links: []
@@ -34,12 +32,17 @@ const Delegates = () => {
     }
   }, []);
 
+  const maxDistance = {}
   const getColorForDistance = (id, distance) => {
-    let ratio = dCon.delegates.filter(d => d.wallet === id)[0].score || 0;
-    ratio = Math.max(-1, Math.min(1, ratio));
-    const red = Math.floor(255 * -ratio);
-    const green = Math.floor(255 * ratio);
-    console.log(ratio, red, green); 
+    if (!maxDistance[id]) {
+        maxDistance[id] = Math.max(distance, 10);
+    } else {
+        maxDistance[id] = Math.max(maxDistance[id], distance);
+    }
+    let maxDistanceLocal = maxDistance[id];
+    const ratio = Math.max(0, (Math.abs(distance) / maxDistanceLocal));
+    const red = Math.floor(255 * ratio);
+    const green = Math.floor(255 * (1 - ratio));
     return `rgb(${red},${green},0)`;
   };
 
