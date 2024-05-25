@@ -62,7 +62,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
       />
       {delegates
         .filter((delegate) =>
-         delegate.name == undefined ||  delegate.name?.toLowerCase().includes(search.toLowerCase())
+         (delegate.name == undefined && delegate.wallet.toLowerCase().includes(search.toLowerCase())) ||  delegate.name?.toLowerCase().includes(search.toLowerCase())
         )
         .sort((a, b) => b.votingpower - a.votingpower)
         .map((delegate, index) => {
