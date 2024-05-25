@@ -50,7 +50,6 @@ const Results = ({
     }
     onChange(newDps);
   };
-  console.log(dCon.delegates);
 
   return (
     <div className="px-2">

@@ -17,7 +17,7 @@ const Delegates = () => {
         .map((d) => {
             return {
                 id: d.wallet,
-                name: d.name?.split(' ')[0] || d.wallet,
+                name: d.name?.startsWith('0x') ? (d.name?.substring(0,6)+"...") : (d.name?.split(' ')[0] || d.wallet),
                 votingPower: d.votingpower / 100000,
                 score: d.score,
             };
@@ -36,6 +36,11 @@ const Delegates = () => {
   const getColorForDistance = (id, distance) => {
     let ratio = dCon.delegates.filter(d => d.wallet === id)[0].score || 0;
     ratio = Math.max(-1, Math.min(1, ratio));
+    if (ratio < 0) {
+        ratio -= 0.3;
+    } else {
+        ratio += 0.3;
+    }
     const red = Math.floor(255 * -ratio);
     const green = Math.floor(255 * ratio);
     return `rgb(${red},${green},0)`;
