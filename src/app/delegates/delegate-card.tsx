@@ -58,7 +58,7 @@ const DelegateCard = ({ name, votingPower, state,wallet, showScore, onChange }: 
       </button>
       <div onClick={() => toggleExpectation("neutral")}>
         <p>{name??makeNiceAddress(wallet)} ({Math.round(votingPower/1000)}k)</p>
-        <p>Probability: {Math.abs(state)}%</p>
+        <p>Probability: {Math.ceil(Math.abs(state)*100)}%</p>
       </div>
       <button type="button" onClick={() => toggleExpectation("for")}>
         <Image src={ampelmannGreenPic} alt="" width={40} />
