@@ -49,9 +49,7 @@ const Delegates = ({
       .then((delegates) => {
         // setDelegates(delegates);
         dCon.setDelegates(delegates);
-        console.log("ds", delegates);
         setLoading(false);
-        alert("hi");
       })
       .catch((error) => {
         setError(`Failed to fetch Delegates for DAO ${dao.name}.`);
