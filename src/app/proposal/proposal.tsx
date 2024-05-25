@@ -33,12 +33,20 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
     <div className="proposal max-w-xl mx-auto space-y-6">
       <img className="dao-logo" src={dao.logo} alt="DAO Logo" />
       <h3>1. Test a new proposal on &quot;{dao.name}&quot; DAO:</h3>
+      <div className="row row-auto">
       <textarea
         value={proposal}
         onChange={(e) => setProposal(e.target.value)}
         className="w-full px-3 py-3 bg-slate-100 rounded-md"
         placeholder="Type your new proposal..."
       />
+      <button onClick={()=>{
+        dCon.setDelegates(dCon.delegates.map((d)=>{
+          return {...d, score: 0}
+          }
+        ));
+      }}>Reset</button>
+      </div>
       <h3>2. Select your delegates:</h3>
       <Delegates
         showScores={score !== -1}
@@ -53,7 +61,14 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
         submitProposal(dao.id, {
           proposal, delegates: dCon.selectedDelegates}).then((response: ProposalResponse) => {
           // setScore(response.score);
-          dCon.setDelegates(response.delegates);
+          const delProbs:any={}
+          response.probabilities.forEach((d)=>{
+            delProbs[d.voter]=d.weighted_score;
+          });
+          dCon.setDelegates(dCon.delegates.map((d)=>{
+            return {...d, score: delProbs[d.wallet]}
+            }));
+
           console.log(response);
           setLoading(false);
           

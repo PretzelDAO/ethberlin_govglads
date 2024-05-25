@@ -3,6 +3,7 @@ export interface Delegate {
   name?: string;
   logo?: string;
   votingpower: number;
+  score?: number;
 }
 
 export interface APIDelProb {

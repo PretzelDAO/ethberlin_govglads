@@ -14,7 +14,7 @@ interface Props {
   wallet: string;
   votingPower: number;
   maxvotingpower: number;
-  state: number;
+  state?: number;
   showScore: boolean;
   onChange: (number: number) => void;
 }
@@ -31,11 +31,11 @@ const DelegateCard = ({
   onChange,
 }: Props) => {
   let expectation = "neutral";
-  // if (state < 0) {
-  //   expectation = "against";
-  // } else if (state > 0) {
-  //   expectation = "for";
-  // }
+  if ((state??0) < 0) {
+    expectation = "against";
+  } else if ((state??0 )> 0) {
+    expectation = "for";
+  }
 
   const toggleExpectation = (newExpectation: Expectation) => {
     let newState = 0;
@@ -50,7 +50,7 @@ const DelegateCard = ({
   const dCon = useContext(DelegateContext);
   const selectedDelegates = dCon.selectedDelegates;
   const thisDelegate = selectedDelegates.find((d) => d.wallet === wallet);
-  console.log(thisDelegate, selectedDelegates);
+  // console.log(state, selectedDelegates);
   if(thisDelegate){
     expectation = thisDelegate.probability < 0 ? "against" : thisDelegate.probability > 0 ? "for" : "neutral";
   }
@@ -81,7 +81,7 @@ const DelegateCard = ({
             {name ?? makeNiceAddress(wallet)} ({Math.round(votingPower / 1000)}
             k)
           </p>
-          <p>Probability: {Math.ceil(Math.abs(state)*100)}%</p>
+          <p>Probability: {Math.ceil(Math.abs(state??0)*100)}%</p>
         </div>
         <button type="button" onClick={() => {
           if(thisDelegate){

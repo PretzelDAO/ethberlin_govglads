@@ -77,10 +77,10 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
         )
         .sort((a, b) => b.votingpower - a.votingpower)
         .map((delegate, index) => {
-          const dp = delegateProbabilities.find(
-            (d) => d.wallet === delegate.wallet
-          );
-          const state = dp ? dp.probability : 0;
+          // const dp = delegateProbabilities.find(
+          //   (d) => d.wallet === delegate.wallet
+          // );
+          // const state = dp ? dp.probability : 0;
           // console.log("render",delegate.wallet)
 
           return (
@@ -89,7 +89,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
               name={delegate.name}
               votingPower={delegate.votingpower}
               wallet={delegate.wallet}
-              state={state}
+              state={delegate.score}
               showScore={showScores}
               onChange={(newState) => toggled(delegate, newState)}
               maxvotingpower={delegate.maxvotingpower}
