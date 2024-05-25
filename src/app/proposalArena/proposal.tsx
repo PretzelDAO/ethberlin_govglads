@@ -33,11 +33,6 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
     }).finally(() => setLoading(false));
   };
 
-  if (loading) {
-    return <Loading msg={"Calculating your proposal's score"}/>;
-  }
-
-
   const disabled = !proposal;
 
   return (
@@ -45,6 +40,7 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
       className="proposal space-y-6 py-6"
       onSubmit={handleSubmit}
     >
+      {loading && <Loading msg={"Calculating your proposal's score"}/>}
       <div className="proposal-section max-w-xl mx-auto space-y-6 py-6">
           <textarea
             value={proposal}

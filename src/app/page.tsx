@@ -12,7 +12,7 @@ import Header from "@/app/components/header";
 export default function Home() {
   const [dao, setDao] = useState<Dao | undefined>(undefined);
   return (
-    <main className="min-h-screen items-center justify-between bg-fixed bg-cover bg-center"
+    <main className="relative min-h-screen items-center justify-between bg-fixed bg-cover bg-center"
         style={{ backgroundImage: "url('/bg.png')" }}
     >
         <Header dao={dao}/>

@@ -1,3 +1,5 @@
+import { APIDelProb } from "./delegate";
+
 export interface DelegateProbability {
   wallet: string;
   probability: number;
@@ -10,5 +12,5 @@ export interface ProposalRequest {
 
 export interface ProposalResponse {
   score: number;
-  delegates: DelegateProbability[];
+  probabilities: APIDelProb[];
 }

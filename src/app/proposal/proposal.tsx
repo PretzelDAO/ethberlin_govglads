@@ -1,13 +1,15 @@
 "use client";
 
 import Delegates from "@/app/delegates/delegates";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./proposal.scss";
 import { submitProposal } from "@/app/services";
 import { ProposalResponse, type DelegateProbability } from "@/domains/proposal";
 import Loading from "@/app/components/loading";
 import type { Dao } from "@/domains/dao";
-
+import SubmitButton from "./submit-button";
+import { DelegateContext } from "@/providers/stateProvider";
+import Results from "../results/results";
 
 interface ProposalProps {
   dao: Dao;
@@ -16,43 +18,42 @@ interface ProposalProps {
 
 const Proposal = ({ dao, onSubmit }: ProposalProps) => {
   const [proposal, setProposal] = useState<string>("");
-  const [selectedDelegateProbabilities, setSelectedDelegateProbabilities] = useState<DelegateProbability[]>([]);
+  const [selectedDelegateProbabilities, setSelectedDelegateProbabilities] =
+    useState<DelegateProbability[]>([]);
   const [score, setScore] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setScore(-1);
-    setLoading(true);
-    submitProposal(dao.id, {
-        proposal,
-        delegates: selectedDelegateProbabilities
-    }).then((res: ProposalResponse) => {
-        setScore(res.score);
-        setSelectedDelegateProbabilities(res.delegates);
-    }).finally(() => setLoading(false));
-  };
+  const [showResults, setShowResults] = useState<boolean>(false);
+  const dCon = useContext(DelegateContext);
 
   if (loading) {
-    return <Loading msg={"Calculating your proposal's score"}/>;
+    return <Loading msg={"Calculating your proposal's score"} />;
   }
-
 
   const disabled = !proposal;
 
+  if(showResults){
+    return <Results dao={dao} delegateProbabilities={selectedDelegateProbabilities} showScores={true} onChange={setSelectedDelegateProbabilities} />
+  }
+
   return (
-    <form
-      className="proposal max-w-xl mx-auto space-y-6 py-6"
-      onSubmit={handleSubmit}
-    >
+    <div className="proposal max-w-xl mx-auto space-y-6">
       <img className="dao-logo" src={dao.logo} alt="DAO Logo" />
       <h3>1. Test a new proposal on &quot;{dao.name}&quot; DAO:</h3>
+      <div className="row row-auto">
       <textarea
         value={proposal}
         onChange={(e) => setProposal(e.target.value)}
         className="w-full px-3 py-3 bg-slate-100 rounded-md"
         placeholder="Type your new proposal..."
       />
+      <button onClick={()=>{
+        dCon.setDelegates(dCon.delegates.map((d)=>{
+          return {...d, score: 0}
+          }
+        ));
+      }}>Reset</button>
+      </div>
       <h3>2. Select your delegates:</h3>
       <Delegates
         showScores={score !== -1}
@@ -63,19 +64,30 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
       {score !== -1 && (
         <p>The probability of your proposal passing is: {score}</p>
       )}
-      <button
-        type="submit"
-        disabled={disabled}
-        className={`w-full px-6 py-2 rounded-lg text-white font-bold focus:outline-none focus:ring-2 focus:ring-offset-2
-              ${
-                disabled
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600 focus:ring-blue-500"
-              }`}
-      >
-        Test proposal now
-      </button>
-    </form>
+      <SubmitButton disabled={disabled} onClick={()=>{
+        submitProposal(dao.id, {
+          proposal, delegates: dCon.selectedDelegates}).then((response: ProposalResponse) => {
+          // setScore(response.score);
+          const delProbs:any={}
+          response.probabilities.forEach((d)=>{
+            delProbs[d.voter]=d.similarity_ratio;
+          });
+          // dCon.setFinalResults(response);
+          dCon.setDelegates(dCon.delegates.map((d)=>{
+            return {...d, score: delProbs[d.wallet]}
+            }));
+          console.log("SET RES",response);
+
+          setLoading(false);
+          setShowResults(true);
+          
+          }).catch((error) => {
+            console.error(error);
+            setLoading(false);
+          }
+        );
+      }} />
+    </div>
   );
 };
 
