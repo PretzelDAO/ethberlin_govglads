@@ -18,11 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-      <body className={inter.className}>
-        <Header/>
-        <DelegateContextProvider>
-        {children}
-        </DelegateContextProvider>
+      <body className={`${inter.className} h-full pt-[calc(56px+10px+10px)]`}>
+        <Header />
+        <DelegateContextProvider>{children}</DelegateContextProvider>
       </body>
     </html>
   );
