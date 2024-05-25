@@ -30,7 +30,7 @@ const Page = () => {
     return () => window.removeEventListener("resize", resize);
   }, []);
 
-  return <div ref={ref} className="h-80"></div>;
+  return <div ref={ref} className="h-full"></div>;
 };
 
 export default Page;
