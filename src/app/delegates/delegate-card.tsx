@@ -27,10 +27,10 @@ const DelegateCard = ({ name, votingPower }: Props) => {
         "grid-cols-[max-content,auto,max-content]",
         "items-center",
         "gap-10",
-        "bg-slate-100",
         "px-10",
         "py-4",
         "rounded-md",
+        expectation === "neutral" && "bg-slate-100",
         expectation === "against" && "bg-red-100 -translate-x-10",
         expectation === "for" && "bg-green-100 translate-x-10",
         "transition-all"
