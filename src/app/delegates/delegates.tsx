@@ -3,10 +3,11 @@
 import type { Delegate } from "@/domains/delegate";
 import { Dao } from "@/domains/dao";
 import DelegateCard from "./delegate-card";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getDelegates } from "@/app/services";
 import Loading from "@/app/components/loading";
 import type { DelegateProbability } from "@/domains/proposal";
+import { DelegateContext } from "@/providers/stateProvider";
 
 interface DelegatesProps {
   dao: Dao;
@@ -21,6 +22,8 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+
+  
   useEffect(() => {
     getDelegates(dao.id).then(delegates => {
       setDelegates(delegates);

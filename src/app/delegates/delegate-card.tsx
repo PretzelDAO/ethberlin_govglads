@@ -6,6 +6,8 @@ import ampelmannRedPic from "@/images/ampelmann-red.svg";
 import ccn from "@/utils/compose-class-name";
 import VotingPowerBar from "./voting-power-bar";
 import { makeNiceAddress } from "@/utils/stringutils";
+import { useContext } from "react";
+import { DelegateContext } from "@/providers/stateProvider";
 
 interface Props {
   name?: string;
@@ -29,11 +31,11 @@ const DelegateCard = ({
   onChange,
 }: Props) => {
   let expectation = "neutral";
-  if (state < 0) {
-    expectation = "against";
-  } else if (state > 0) {
-    expectation = "for";
-  }
+  // if (state < 0) {
+  //   expectation = "against";
+  // } else if (state > 0) {
+  //   expectation = "for";
+  // }
 
   const toggleExpectation = (newExpectation: Expectation) => {
     let newState = 0;
@@ -45,7 +47,13 @@ const DelegateCard = ({
 
     onChange(state === newState ? 0 : newState);
   };
-
+  const dCon = useContext(DelegateContext);
+  const selectedDelegates = dCon.delegates;
+  const thisDelegate = selectedDelegates.find((d) => d.wallet === wallet);
+  console.log(thisDelegate, selectedDelegates);
+  if(thisDelegate){
+    expectation = thisDelegate.state < 0 ? "against" : thisDelegate.state > 0 ? "for" : "neutral";
+  }
   return (
     <div
       className={ccn(
@@ -58,17 +66,33 @@ const DelegateCard = ({
       )}
     >
       <div className="px-10 py-4 grid grid-cols-[max-content,auto,max-content] items-center gap-10">
-        <button type="button" onClick={() => toggleExpectation("against")}>
+        <button type="button" onClick={() => {
+          if(thisDelegate){
+            dCon.setDelegates(selectedDelegates.filter((d) => d.wallet !== wallet));
+          }else{
+                    console.log("setting",[...dCon.delegates,{'wallet':wallet, 'state':-1}])
+                    dCon.setDelegates( [...dCon.delegates,{'wallet':wallet, 'state':-1}])
+          }
+        }}>
           <Image src={ampelmannRedPic} alt="" width={40} />
         </button>
-        <div onClick={() => toggleExpectation("neutral")}>
+        <div onClick={() => {
+        }}>
           <p>
             {name ?? makeNiceAddress(wallet)} ({Math.round(votingPower / 1000)}
             k)
           </p>
           <p>Probability: {Math.ceil(Math.abs(state)*100)}%</p>
         </div>
-        <button type="button" onClick={() => toggleExpectation("for")}>
+        <button type="button" onClick={() => {
+          if(thisDelegate){
+            dCon.setDelegates(selectedDelegates.filter((d) => d.wallet !== wallet));
+          }
+          else{
+                    console.log("setting",[...dCon.delegates,{'wallet':wallet, 'state':-1}])
+                    dCon.setDelegates( [...dCon.delegates,{'wallet':wallet, 'state':1}])
+          }
+        }}>
           <Image src={ampelmannGreenPic} alt="" width={40} />
         </button>
       </div>
