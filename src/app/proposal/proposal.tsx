@@ -7,7 +7,7 @@ import { submitProposal } from "@/app/services";
 import { ProposalResponse, type DelegateProbability } from "@/domains/proposal";
 import Loading from "@/app/components/loading";
 import type { Dao } from "@/domains/dao";
-
+import SubmitButton from "./submit-button";
 
 interface ProposalProps {
   dao: Dao;
@@ -16,35 +16,19 @@ interface ProposalProps {
 
 const Proposal = ({ dao, onSubmit }: ProposalProps) => {
   const [proposal, setProposal] = useState<string>("");
-  const [selectedDelegateProbabilities, setSelectedDelegateProbabilities] = useState<DelegateProbability[]>([]);
+  const [selectedDelegateProbabilities, setSelectedDelegateProbabilities] =
+    useState<DelegateProbability[]>([]);
   const [score, setScore] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setScore(-1);
-    setLoading(true);
-    submitProposal(dao.id, {
-        proposal,
-        delegates: selectedDelegateProbabilities
-    }).then((res: ProposalResponse) => {
-        setScore(res.score);
-        setSelectedDelegateProbabilities(res.delegates);
-    }).finally(() => setLoading(false));
-  };
-
   if (loading) {
-    return <Loading msg={"Calculating your proposal's score"}/>;
+    return <Loading msg={"Calculating your proposal's score"} />;
   }
-
 
   const disabled = !proposal;
 
   return (
-    <form
-      className="proposal max-w-xl mx-auto space-y-6 py-6"
-      onSubmit={handleSubmit}
-    >
+    <div className="proposal max-w-xl mx-auto space-y-6 py-6">
       <img className="dao-logo" src={dao.logo} alt="DAO Logo" />
       <h3>1. Test a new proposal on &quot;{dao.name}&quot; DAO:</h3>
       <textarea
@@ -63,19 +47,8 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
       {score !== -1 && (
         <p>The probability of your proposal passing is: {score}</p>
       )}
-      <button
-        type="submit"
-        disabled={disabled}
-        className={`w-full px-6 py-2 rounded-lg text-white font-bold focus:outline-none focus:ring-2 focus:ring-offset-2
-              ${
-                disabled
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600 focus:ring-blue-500"
-              }`}
-      >
-        Test proposal now
-      </button>
-    </form>
+      <SubmitButton disabled={disabled} />
+    </div>
   );
 };
 
