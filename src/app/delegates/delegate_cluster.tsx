@@ -1,45 +1,49 @@
 // pages/delegates.js
-import { useEffect, useRef } from 'react';
-import ForceGraph2D from 'react-force-graph-2d';
-import * as d3 from 'd3-force';
+import { useEffect, useRef } from "react";
+import ForceGraph2D from "react-force-graph-2d";
+import * as d3 from "d3-force";
 import { DelegateContext } from "@/providers/stateProvider";
 import { useContext } from "react";
-
 
 const Delegates = () => {
   const fgRef = useRef();
 
   const dCon = useContext(DelegateContext);
-    const data = {
-        nodes: dCon.delegates
-        .filter((d) => d.votingpower/d.maxvotingpower > 0.05)
-        .filter((d) => d.name)
-        .map((d) => {
-            return {
-                id: d.wallet,
-                name: d.name?.startsWith('0x') ? (d.name?.substring(0,6)+"...") : (d.name?.split(' ')[0] || d.wallet),
-                votingPower: d.votingpower / 100000,
-                score: d.score,
-            };
-        }),
-        links: []
-    };
+  const data = {
+    nodes: dCon.delegates
+      .filter((d) => d.votingpower / d.maxvotingpower > 0.05)
+      .filter((d) => d.name)
+      .map((d) => {
+        return {
+          id: d.wallet,
+          name: d.name?.startsWith("0x")
+            ? d.name?.substring(0, 6) + "..."
+            : d.name?.split(" ")[0] || d.wallet,
+          votingPower: d.votingpower / 100000,
+          score: d.score,
+        };
+      }),
+    links: [],
+  };
 
   useEffect(() => {
     if (fgRef.current) {
-      fgRef.current.d3Force('charge', d3.forceManyBody().strength(20));  // Set repulsion force
-      fgRef.current.d3Force('center', d3.forceCenter());    // Centering force
-      fgRef.current.d3Force('collide', d3.forceCollide().radius(node => Math.sqrt(node.votingPower) * 5)); // Add collision force with exact radius
+      fgRef.current.d3Force("charge", d3.forceManyBody().strength(20)); // Set repulsion force
+      fgRef.current.d3Force("center", d3.forceCenter()); // Centering force
+      fgRef.current.d3Force(
+        "collide",
+        d3.forceCollide().radius((node) => Math.sqrt(node.votingPower) * 5)
+      ); // Add collision force with exact radius
     }
   }, []);
 
   const getColorForDistance = (id, distance) => {
-    let ratio = dCon.delegates.filter(d => d.wallet === id)[0].score || 0;
+    let ratio = dCon.delegates.filter((d) => d.wallet === id)[0].score || 0;
     ratio = Math.max(-1, Math.min(1, ratio));
     if (ratio < 0) {
-        ratio -= 0.3;
+      ratio -= 0.3;
     } else {
-        ratio += 0.3;
+      ratio += 0.3;
     }
     const red = Math.floor(255 * -ratio);
     const green = Math.floor(255 * ratio);
@@ -54,7 +58,7 @@ const Delegates = () => {
     const ratio = radius / distance;
     return {
       x: referenceNode.x + dx * ratio,
-      y: referenceNode.y + dy * ratio
+      y: referenceNode.y + dy * ratio,
     };
   };
 
@@ -74,44 +78,63 @@ const Delegates = () => {
 
     const color = getColorForDistance(referenceNode.id, distanceFromReference);
 
-    const intersectionPoint = getIntersectionPoint(referenceNode, node, Math.sqrt(referenceNode.votingPower) * 5);
+    const intersectionPoint = getIntersectionPoint(
+      referenceNode,
+      node,
+      Math.sqrt(referenceNode.votingPower) * 5
+    );
 
     if (!isFinite(intersectionPoint.x) || !isFinite(intersectionPoint.y)) {
       //console.error("Invalid intersection point", { intersectionPoint });
       return;
     }
 
-    const gradient = ctx.createRadialGradient(intersectionPoint.x, intersectionPoint.y, 0, node.x, node.y, radius);
+    const gradient = ctx.createRadialGradient(
+      intersectionPoint.x,
+      intersectionPoint.y,
+      0,
+      node.x,
+      node.y,
+      radius
+    );
     gradient.addColorStop(0, color);
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
 
     ctx.beginPath();
     ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
     ctx.fillStyle = gradient;
     ctx.fill();
 
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.2)";
     ctx.stroke();
 
     ctx.font = `${fontSize}px Sans-Serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = 'black';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "black";
     ctx.fillText(label, node.x, node.y);
   };
 
   return (
-    <div style={{ width: '100%', height: '100vh' }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <ForceGraph2D
         ref={fgRef}
         graphData={data}
         nodeCanvasObject={(node, ctx, globalScale) => {
           const referenceNode = data.nodes.reduce((maxNode, currentNode) => {
-            return currentNode.votingPower > maxNode.votingPower ? currentNode : maxNode;
+            return currentNode.votingPower > maxNode.votingPower
+              ? currentNode
+              : maxNode;
           }, data.nodes[0]);
 
-          const maxDistance = Math.max(...data.nodes.map(n => Math.sqrt((n.x - referenceNode.x) ** 2 + (n.y - referenceNode.y) ** 2)));
-          data.nodes.forEach(referenceNode => {
+          const maxDistance = Math.max(
+            ...data.nodes.map((n) =>
+              Math.sqrt(
+                (n.x - referenceNode.x) ** 2 + (n.y - referenceNode.y) ** 2
+              )
+            )
+          );
+          data.nodes.forEach((referenceNode) => {
             drawNodeWithGradient(node, ctx, globalScale, referenceNode);
           });
         }}
@@ -129,4 +152,3 @@ const Delegates = () => {
 };
 
 export default Delegates;
-

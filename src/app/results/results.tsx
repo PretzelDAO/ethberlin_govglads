@@ -52,8 +52,8 @@ const Results = ({
   };
 
   return (
-    <div className="px-2">
-      <div className="h-1/2 overflow-hidden">
+    <div className="px-2 justify-center">
+      <div className="h-[40vh] w-1/2 overflow-hidden">
         <DelegateCluster />
       </div>
       <div className="flex flex-row">
@@ -63,6 +63,7 @@ const Results = ({
             {dCon.delegates
               .filter((d) => d.votingpower / d.maxvotingpower > 0.05)
               .filter((d) => (d.score ?? 0) > 0)
+              .sort((a, b) => b.votingpower - a.votingpower)
               .map((d) => {
                 return (
                   <div

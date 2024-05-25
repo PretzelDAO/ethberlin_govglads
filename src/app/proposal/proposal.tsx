@@ -55,20 +55,26 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
           className="w-full px-3 py-3 bg-slate-100 rounded-md"
           placeholder="Type your new proposal..."
         />
-        <button
-          onClick={() => {
-            dCon.setDelegates(
-              dCon.delegates.map((d) => {
-                return { ...d, score: 0 };
-              })
-            );
-          }}
-        >
-          Reset
-        </button>
-      </div>
-      <div className="flex justify-center">
-        <Toggle leftLabel="aaa" rightLabel="bbb" />
+        <div className="flex flex-row justify-between">
+          <Toggle
+            leftLabel="similarity"
+            rightLabel="voting power"
+            onChange={(value: "left" | "right") => {
+              dCon.setConfig({ similarity: value == "left" });
+            }}
+          />
+          <button
+            onClick={() => {
+              dCon.setDelegates(
+                dCon.delegates.map((d) => {
+                  return { ...d, score: 0 };
+                })
+              );
+            }}
+          >
+            Reset
+          </button>
+        </div>
       </div>
       <h3>2. Select your delegates:</h3>
       <Delegates
@@ -90,8 +96,14 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
             .then((response: ProposalResponse) => {
               // setScore(response.score);
               const delProbs: any = {};
+              const sim = dCon.config.similarity;
+              console.log("using SIM", sim);
               response.probabilities.forEach((d) => {
-                delProbs[d.voter] = d.similarity_ratio;
+                if (sim) {
+                  delProbs[d.voter] = d.similarity_ratio;
+                } else {
+                  delProbs[d.voter] = d.weighted_score;
+                }
               });
               // dCon.setFinalResults(response);
               dCon.setDelegates(
