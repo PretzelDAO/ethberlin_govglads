@@ -9,6 +9,7 @@ import Loading from "@/app/components/loading";
 import type { Dao } from "@/domains/dao";
 import SubmitButton from "./submit-button";
 import { DelegateContext } from "@/providers/stateProvider";
+import Results from "../results/results";
 
 interface ProposalProps {
   dao: Dao;
@@ -21,6 +22,8 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
     useState<DelegateProbability[]>([]);
   const [score, setScore] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [showResults, setShowResults] = useState<boolean>(false);
   const dCon = useContext(DelegateContext);
 
   if (loading) {
@@ -28,6 +31,10 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
   }
 
   const disabled = !proposal;
+
+  if(showResults){
+    return <Results dao={dao} delegateProbabilities={selectedDelegateProbabilities} showScores={true} onChange={setSelectedDelegateProbabilities} />
+  }
 
   return (
     <div className="proposal max-w-xl mx-auto space-y-6">
@@ -68,7 +75,10 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
           dCon.setDelegates(dCon.delegates.map((d)=>{
             return {...d, score: delProbs[d.wallet]}
             }));
+            dCon.setFinalResults(response);
 
+          setShowResults(true);
+          
           console.log(response);
           setLoading(false);
           
