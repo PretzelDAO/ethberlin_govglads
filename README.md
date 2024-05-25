@@ -2,6 +2,8 @@
 
 `master` branch => https://govglads.netlify.app !!
 
+Governance Gladiator is a tool for crafting the perfect proposal for your DAO. Using AI-trained social graph analysis, determine the liklihood of your proposal passing so you and your community can spend less time arguing and more time building!
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

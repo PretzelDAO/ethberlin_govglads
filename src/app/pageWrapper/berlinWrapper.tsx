@@ -17,8 +17,8 @@ export default function BerlinWrapper({
   const [dao, setDao] = useState<Dao | undefined>(undefined);
   return (
     <main
-      className="min-h-screen items-center justify-between bg-fixed bg-cover bg-center"
-      //   style={{ backgroundImage: "url('/bg.png')" }}
+      className="min-h-screen items-center justify-between bg-fixed bg-cover bg-center md:bg-blend-darken"
+      style={{ backgroundImage: "url('/berlin-bg.png')" }}
     >
       <Header dao={dao} setBerlin={setBerlin} berlin />
       {!dao && <Daos daoSelected={(d) => setDao(d)} />}
