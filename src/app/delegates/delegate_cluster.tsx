@@ -17,7 +17,7 @@ const Delegates = () => {
         .map((d) => {
             return {
                 id: d.wallet,
-                name: d.name,
+                name: d.name?.split(' ')[0] || d.wallet,
                 votingPower: d.votingpower / 100000,
                 score: d.score,
             };
@@ -59,7 +59,7 @@ const Delegates = () => {
     const radius = Math.sqrt(node.votingPower) * 5;
 
     if (!isFinite(node.x) || !isFinite(node.y) || !isFinite(radius)) {
-      console.error("Invalid values for node position or radius", { node, radius });
+      //console.error("Invalid values for node position or radius", { node, radius });
       return;
     }
 
@@ -72,7 +72,7 @@ const Delegates = () => {
     const intersectionPoint = getIntersectionPoint(referenceNode, node, Math.sqrt(referenceNode.votingPower) * 5);
 
     if (!isFinite(intersectionPoint.x) || !isFinite(intersectionPoint.y)) {
-      console.error("Invalid intersection point", { intersectionPoint });
+      //console.error("Invalid intersection point", { intersectionPoint });
       return;
     }
 
