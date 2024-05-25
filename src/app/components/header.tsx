@@ -1,13 +1,28 @@
+'use client';
+
 import Image from "next/image";
 import logo from "@/images/logo.png";
 import "./header.scss";
-import { Dao } from "@/domains/dao";
+import { useContext, useEffect, useState } from "react";
+import { NearContext } from "../contexts/WalletContext";
 
-interface Props {
-    dao?: Dao;
-}
+export default function Header() {
+  const { signedAccountId, wallet } = useContext(NearContext);
+  const [action, setAction] = useState(() => { });
+  const [label, setLabel] = useState('Loading...');
 
-export default function Header({ dao }: Props) {
+  useEffect(() => {
+    if (!wallet) return;
+
+    if (signedAccountId) {
+      setAction(() => (wallet as any).signOut);
+      setLabel(`Logout ${signedAccountId}`);
+    } else {
+      setAction(() => (wallet as any).signIn);
+      setLabel('Login');
+    }
+  }, [signedAccountId, wallet]);
+
   return (
     <div className="h-[calc(56px+10px+10px)]">
       <header>
