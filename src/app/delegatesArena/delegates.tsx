@@ -67,13 +67,14 @@ const Delegates = ({
   }
 
   const toggled = (wallet: string, newState: number) => {
-    let newDps = delegateProbabilities.filter((d) => d.wallet !== wallet);
+    let newDps = dCon.selectedDelegates.filter((d) => d.wallet !== wallet);
     if (newState !== 0) {
       newDps.push({
         wallet,
         probability: newState,
       });
     }
+    dCon.setSelectedDelegates(newDps);
     onChange(newDps);
   };
 
@@ -102,7 +103,7 @@ const Delegates = ({
             size={normalize(delegate.votingpower, votingPowers)}
             showScore={showScores}
             onChange={(newState) => toggled(delegate.wallet, newState)}
-            rank={delegate.votingpower/delegate.maxvotingpower*100}
+            rank={(delegate.votingpower / delegate.maxvotingpower) * 100}
           />
         );
       });
