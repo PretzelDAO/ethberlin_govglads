@@ -5,12 +5,13 @@ export const POST = async (request: NextRequest) => {
   const body = await request.json();
   console.log("body", body);
   const delegates = body.delegates;
+  const type = body.type;
   const res = await fetch("https://fba38e3e6170.ngrok.app/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ delegates }),
+    body: JSON.stringify({ delegates, type }),
   });
   const proposalResponse = await res.json();
   console.log("proposalResponse", proposalResponse);

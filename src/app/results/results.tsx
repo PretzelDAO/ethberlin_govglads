@@ -79,7 +79,7 @@ const Results = ({
                 return (
                   <div
                     key={d.wallet}
-                    className="bg-green-400 my-0.5 rounded-md w-full p-1"
+                    className="bg-green-400/60 my-0.5 rounded-md w-full p-1"
                   >
                     <p>
                       {d.name ?? makeNiceAddress(d.wallet)} (
@@ -104,7 +104,10 @@ const Results = ({
               .map((d) => {
                 console.log(d.name, d.wallet);
                 return (
-                  <div key={d.wallet} className="bg-red-400 my-0.5 rounded-md">
+                  <div
+                    key={d.wallet}
+                    className="bg-red-400/60 my-0.5 rounded-md p-1"
+                  >
                     <p>
                       {d.name?.substring(0, 20) ?? makeNiceAddress(d.wallet)} (
                       {Math.round(d.votingpower / 1000)}

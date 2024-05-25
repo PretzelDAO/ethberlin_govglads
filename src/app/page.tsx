@@ -8,16 +8,13 @@ import Proposal from "@/app/proposalArena/proposal";
 import React, { useEffect, useState } from "react";
 import type { Dao } from "@/domains/dao";
 import Header from "@/app/components/header";
+import ArenaWrapper from "./pageWrapper/arenaWrapper";
+import BerlinWrapper from "./pageWrapper/berlinWrapper";
 
 export default function Home() {
-  const [dao, setDao] = useState<Dao | undefined>(undefined);
-  return (
-    <main className="min-h-screen items-center justify-between bg-fixed bg-cover bg-center"
-        style={{ backgroundImage: "url('/bg.png')" }}
-    >
-        <Header dao={dao}/>
-        {!dao && <Daos daoSelected={(d) => setDao(d)} />}
-        {dao && <Proposal dao={dao} onSubmit={() => {}}/>}
-    </main>
-  );
+  const [berlin, setBerlin] = useState(true);
+  if (berlin) {
+    return <BerlinWrapper setBerlin={setBerlin} />;
+  }
+  return <ArenaWrapper setBerlin={setBerlin} />;
 }

@@ -4,14 +4,16 @@ interface Props {
   leftLabel: string;
   rightLabel: string;
   onChange?: (selected: "left" | "right") => void;
+  state?: "left" | "right";
 }
 
-const Toggle = ({ leftLabel, rightLabel, onChange }: Props) => {
+const Toggle = ({ leftLabel, rightLabel, onChange, state }: Props) => {
   return (
     <label className="cursor-pointer inline-flex gap-4 items-center">
       {/* NOTE: Needs to be first element, else "peer" modifier won't work */}
       <input
         type="checkbox"
+        value={state}
         className="peer opacity-0 absolute h-0 w-0"
         onChange={(e) => onChange?.(e.target.checked ? "right" : "left")}
       />

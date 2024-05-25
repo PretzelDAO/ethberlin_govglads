@@ -92,6 +92,7 @@ const Proposal = ({ dao, onSubmit }: ProposalProps) => {
           submitProposal(dao.id, {
             proposal,
             delegates: dCon.selectedDelegates,
+            type: dCon.config.similarity ? "similarity" : "votingpower",
           })
             .then((response: ProposalResponse) => {
               // setScore(response.score);

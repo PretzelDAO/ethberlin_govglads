@@ -8,6 +8,7 @@ export interface DelegateProbability {
 export interface ProposalRequest {
   proposal: string;
   delegates: DelegateProbability[];
+  type: "similarity" | "votingpower";
 }
 
 export interface ProposalResponse {
