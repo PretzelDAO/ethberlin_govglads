@@ -8,6 +8,7 @@ import { getDelegates } from "@/app/services";
 import Loading from "@/app/components/loading";
 import type { DelegateProbability } from "@/domains/proposal";
 import { DelegateContext } from "@/providers/stateProvider";
+import Results from "../results/results";
 
 interface DelegatesProps {
   dao: Dao;
@@ -55,6 +56,7 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
     onChange(newDps);
   };
   console.log(dCon.delegates);
+
 
   return (
     <div className="px-10 mx-auto space-y-6">

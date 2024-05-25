@@ -2,41 +2,28 @@
 import { useEffect, useRef } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import * as d3 from 'd3-force';
+import { DelegateContext } from "@/providers/stateProvider";
+import { useContext } from "react";
+
 
 const Delegates = () => {
   const fgRef = useRef();
 
-  const data = {
-    nodes: [
-      { id: 'delegate1', name: 'Delegate 1', votingPower: 10 },
-      { id: 'delegate2', name: 'Delegate 2', votingPower: 20 },
-      { id: 'delegate3', name: 'Delegate 3', votingPower: 300 },
-      { id: 'delegate4', name: 'Delegate 4', votingPower: 40 },
-      { id: 'delegate5', name: 'Delegate 5', votingPower: 50 },
-      { id: 'delegate6', name: 'Delegate 6', votingPower: 10 },
-      { id: 'delegate7', name: 'Delegate 7', votingPower: 20 },
-      { id: 'delegate8', name: 'Delegate 8', votingPower: 300 },
-      { id: 'delegate9', name: 'Delegate 9', votingPower: 40 },
-      { id: 'delegate10', name: 'Delegate 10', votingPower: 50 },
-      { id: 'delegate11', name: 'Delegate 11', votingPower: 100 },
-      { id: 'delegate12', name: 'Delegate 12', votingPower: 20 },
-      { id: 'delegate13', name: 'Delegate 13', votingPower: 30 },
-      { id: 'delegate14', name: 'Delegate 14', votingPower: 400 },
-      { id: 'delegate15', name: 'Delegate 15', votingPower: 50 },
-      { id: 'delegate16', name: 'Delegate 16', votingPower: 10 },
-      { id: 'delegate17', name: 'Delegate 17', votingPower: 200 },
-      { id: 'delegate18', name: 'Delegate 18', votingPower: 30 },
-      { id: 'delegate19', name: 'Delegate 19', votingPower: 40 },
-      { id: 'delegate20', name: 'Delegate 20', votingPower: 500 },
-      { id: 'delegate21', name: 'Delegate 21', votingPower: 10 },
-      { id: 'delegate22', name: 'Delegate 22', votingPower: 20 },
-      { id: 'delegate23', name: 'Delegate 23', votingPower: 300 },
-      { id: 'delegate24', name: 'Delegate 24', votingPower: 40 },
-      { id: 'delegate25', name: 'Delegate 25', votingPower: 50 },
-      // Add more delegates here
-    ],
-    links: []
-  };
+  const dCon = useContext(DelegateContext);
+    const data = {
+        nodes: dCon.delegates
+        .filter((d) => d.votingpower/d.maxvotingpower > 0.05)
+        .filter((d) => d.name)
+        .map((d) => {
+            return {
+                id: d.wallet,
+                name: d.name,
+                votingPower: d.votingpower / 100000,
+                score: d.score,
+            };
+        }),
+        links: []
+    };
 
   useEffect(() => {
     if (fgRef.current) {
