@@ -19,6 +19,7 @@ const Delegates = () => {
                 id: d.wallet,
                 name: d.name,
                 votingPower: d.votingpower / 100000,
+                score: d.score,
             };
         }),
         links: []

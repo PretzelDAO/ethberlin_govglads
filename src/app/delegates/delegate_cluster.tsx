@@ -10,7 +10,6 @@ const Delegates = () => {
   const fgRef = useRef();
 
   const dCon = useContext(DelegateContext);
-  console.log(dCon.delegates);
     const data = {
         nodes: dCon.delegates
         .filter((d) => d.votingpower/d.maxvotingpower > 0.05)
@@ -39,7 +38,6 @@ const Delegates = () => {
     ratio = Math.max(-1, Math.min(1, ratio));
     const red = Math.floor(255 * -ratio);
     const green = Math.floor(255 * ratio);
-    console.log(ratio, red, green); 
     return `rgb(${red},${green},0)`;
   };
 

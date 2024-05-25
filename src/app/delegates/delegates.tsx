@@ -8,7 +8,6 @@ import { getDelegates } from "@/app/services";
 import Loading from "@/app/components/loading";
 import type { DelegateProbability } from "@/domains/proposal";
 import { DelegateContext } from "@/providers/stateProvider";
-import DelegateCluster from "./delegate_cluster";
 import Results from "../results/results";
 
 interface DelegatesProps {
@@ -61,7 +60,6 @@ const Delegates = ({ dao, delegateProbabilities, showScores, onChange }: Delegat
 
   return (
     <div className="px-10 mx-auto space-y-6">
-      <DelegateCluster />
       <input
         type="text"
         value={search}

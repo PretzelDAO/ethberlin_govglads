@@ -8,6 +8,7 @@ import { getDelegates } from "@/app/services";
 import Loading from "@/app/components/loading";
 import type { DelegateProbability } from "@/domains/proposal";
 import { DelegateContext } from "@/providers/stateProvider";
+import DelegateCluster from "../delegates/delegate_cluster";
 
 interface DelegatesProps {
   dao: Dao;
@@ -22,8 +23,6 @@ const Results = ({ dao, delegateProbabilities, showScores, onChange }: Delegates
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const dCon = useContext(DelegateContext);
-
-
   
   useEffect(() => {
     getDelegates(dao.id).then(delegates => {
@@ -57,11 +56,9 @@ const Results = ({ dao, delegateProbabilities, showScores, onChange }: Delegates
   console.log(dCon.delegates);
 
   return (
-    <div className="px-10 mx-auto space-y-6">
         <div>
-            
+            <DelegateCluster />
         </div>
-    </div>
   );
 };
 
