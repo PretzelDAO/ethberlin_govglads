@@ -37,24 +37,28 @@ const Delegates = ({
   onChange,
 }: DelegatesProps) => {
   const [search, setSearch] = useState<string>("");
-  const [delegates, setDelegates] = useState<Delegate[]>([]);
+  // const [delegates, setDelegates] = useState<Delegate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const dCon = useContext(DelegateContext);
   delegateProbabilities = dCon.selectedDelegates;
 
   useEffect(() => {
+    setLoading(true);
     getDelegates(dao.id)
       .then((delegates) => {
         // setDelegates(delegates);
         dCon.setDelegates(delegates);
+        console.log("ds", delegates);
         setLoading(false);
+        alert("hi");
       })
       .catch((error) => {
         setError(`Failed to fetch Delegates for DAO ${dao.name}.`);
         setLoading(false);
       });
   }, []);
+  console.log("dels", dCon.delegates);
 
   if (loading) {
     return <Loading msg={`Loading delegates for DAO ${dao.name}`} />;
@@ -75,7 +79,7 @@ const Delegates = ({
     onChange(newDps);
   };
 
-  const votingPowers = delegates.map((d) => d.votingpower);
+  const votingPowers = dCon.delegates.map((d) => d.votingpower);
 
   const renderDelegates = (dels: Delegate[]) => {
     return dels
@@ -124,7 +128,7 @@ const Delegates = ({
               (dp.probability === -1 || dp.probability === 1)
           )
       )
-    : delegates;
+    : dCon.delegates;
 
   function handleDragEnd({ active, over }: any) {
     if (!active || !over) {

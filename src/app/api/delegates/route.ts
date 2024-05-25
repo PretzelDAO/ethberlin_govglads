@@ -21,6 +21,7 @@ export const GET = async (request: NextRequest) => {
     for (let i = 0; i < r2.rows.length; i++) {
       r2.rows[i].maxvotingpower = r1.rows[0].max;
     }
+    console.log(r2.rows);
     return r2;
   });
   // console.log(result.rows);
