@@ -59,6 +59,11 @@ const Results = ({
         Your Proposal Passing Chance: {Math.ceil(dCon.finalResults.score * 100)}
         %
       </h2>
+      <h2>
+        ({Math.round(dCon.finalResults.vp_for / 1000)}
+        k) vs ({Math.round(dCon.finalResults.vp_against / 1000)}
+        k)
+      </h2>
       <h3>Delegates Connection window</h3>
       <div className="h-[400px] w-[400px]  rounded-md border-blue-400 border-2 overflow-hidden">
         <DelegateCluster />

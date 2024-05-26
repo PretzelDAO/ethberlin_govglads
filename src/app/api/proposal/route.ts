@@ -19,7 +19,12 @@ export const POST = async (request: NextRequest) => {
   console.log("dels", dels);
 
   return NextResponse.json(
-    { score: proposalResponse.score, probabilities: dels },
+    {
+      score: proposalResponse.score,
+      probabilities: dels,
+      vp_for: proposalResponse.vp_for,
+      vp_against: proposalResponse.vp_against,
+    },
     { status: 200 }
   );
 };
